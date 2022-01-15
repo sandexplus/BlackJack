@@ -1,4 +1,5 @@
 import { addCard } from './modules/addCard';
+import { checkScore } from './modules/checkScore';
 import { newRound } from './modules/newRound';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -8,7 +9,12 @@ window.addEventListener('DOMContentLoaded', () => {
         dealerHandOutput = document.querySelector('.game__dealer-hand'),
         yourScoreOutput = document.querySelector('.game__your-score'),
         dealerScoreOutput = document.querySelector('.game__dealer-score'),
-        winner = document.querySelector('.game__winner');
+        winner = document.querySelector('.game__winner'),
+        saveGame = document.querySelector('.nav__save'),
+        continueGame = document.querySelector('.nav__continue'),
+        newGame = document.querySelector('.nav__new-game'),
+        addCardBtn = document.querySelector('.game__add-card'),
+        holdBtn = document.querySelector('.game__hold');
 
     let deck = [
         '2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s',
@@ -32,7 +38,6 @@ window.addEventListener('DOMContentLoaded', () => {
     dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
 
     // Add card to your hand
-    const addCardBtn = document.querySelector('.game__add-card');
     addCardBtn.addEventListener('click', (e) => {
         e.preventDefault();
 
@@ -45,7 +50,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     // Add card to dealer hand
-    const holdBtn = document.querySelector('.game__hold');
     holdBtn.addEventListener('click', (e) => {
         e.preventDefault();
         console.log(dealerScore);
@@ -84,7 +88,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     // Start new game
-    const newGame = document.querySelector('.nav__new-game');
     newGame.addEventListener('click', (e) => {
         e.preventDefault();
         deck = [
@@ -103,6 +106,35 @@ window.addEventListener('DOMContentLoaded', () => {
         yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
         dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
         winner.textContent = `Winner: `;
+    });
+
+    // Save game
+    saveGame.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        localStorage.setItem('deck', JSON.stringify(deck));
+        localStorage.setItem('yourHand', JSON.stringify(yourHand));
+        localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
+        localStorage.setItem('yourScore', JSON.stringify(yourScore));
+        localStorage.setItem('dealerScore', JSON.stringify(dealerScore));
+    });
+
+
+    // Continue game
+    continueGame.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        deck = JSON.parse(localStorage.getItem('deck'));
+        yourHand = JSON.parse(localStorage.getItem('yourHand'));
+        dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
+        yourScore = JSON.parse(localStorage.getItem('yourScore'));
+        dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
+
+        dealerHandOutput.textContent = dealerHand;
+        checkScore(dealerHand, '.game__dealer-score');
+
+        yourHandOutput.textContent = yourHand;
+        checkScore(yourHand, '.game__your-score');
     });
 
 });
