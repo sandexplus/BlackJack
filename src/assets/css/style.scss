@@ -1,0 +1,101 @@
+$dark-section: #bef574;
+$btn: #8ccb5e;
+$btn-hover: #70ba3c;
+$btn-game: #ccccff;
+$btn-game-hover: #6666ff;
+$btn-hold: #eda1cb;
+$btn-hold-hover: #de4b9c;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+.header {
+    padding: 20px 0;
+    background-color: $dark-section;
+    &__title {
+        font-size: 30px;
+        text-align: center;
+        font-weight: 500;
+    }
+}
+
+.nav {
+    padding-top: 25px;
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+    }
+    &__btn {
+        padding: 15px 25px;
+        border-radius: 10px;
+        background-color: $btn;
+        margin-right: 25px;
+        text-decoration: none;
+        color: #000;
+        transition: 0.5s all;
+        &:hover {
+            background-color: $btn-hover;
+        }
+        &:nth-last-child(1) {
+            margin-right: 0;
+        }
+    }
+}
+
+.game {
+    padding-top: 100px;
+    &__wrapper {
+        display: flex;
+        justify-content: flex-start;
+    }
+    &__btn-wrapper {
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+    &__add-card {
+        padding: 15px 25px;
+        border-radius: 10px;
+        background-color: $btn-game;
+        text-decoration: none;
+        color: #000;
+        transition: 0.5s all;
+        &:hover {
+            background-color: $btn-game-hover;
+        }
+    }
+    &__hold {
+        margin-top: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        background-color: $btn-hold;
+        text-decoration: none;
+        color: #000;
+        transition: 0.5s all;
+        &:hover {
+            background-color: $btn-hold-hover;
+        }
+    }
+    &__board-wrapper {
+        margin-left: 200px;
+    }
+    &__your-hand {
+        font-size: 25px;
+    }
+    &__dealer-hand {
+        margin-top: 30px;
+        font-size: 25px;
+    }
+    &__winner {
+        font-size: 30px;
+        margin-top: 45px;
+    }
+}
