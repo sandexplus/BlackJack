@@ -1,7 +1,7 @@
 import { shuffle } from './shuffle';
 import { addCard } from './addCard';
 
-function newRound(deck, yourHand, dealerHand) {
+function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSelector) {
 
     const yourHandOutput = document.querySelector('.game__your-hand'),
         dealerHandOutput = document.querySelector('.game__dealer-hand');
@@ -10,10 +10,10 @@ function newRound(deck, yourHand, dealerHand) {
 
     console.log(deck);
 
-    addCard(deck, yourHand);
-    addCard(deck, yourHand);
-    addCard(deck, dealerHand);
-    addCard(deck, dealerHand);
+    addCard(deck, yourHand, yourScoreSelector);
+    addCard(deck, yourHand, yourScoreSelector);
+    addCard(deck, dealerHand, dealerScoreSelector);
+    addCard(deck, dealerHand, dealerScoreSelector);
 
     yourHandOutput.textContent = yourHand;
     dealerHandOutput.textContent = dealerHand;
