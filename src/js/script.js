@@ -1,6 +1,7 @@
 import { addCard } from './modules/addCard';
 import { checkScore } from './modules/checkScore';
 import { newRound } from './modules/newRound';
+import { drawCard } from './modules/drawCard';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -42,8 +43,12 @@ window.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         addCard(deck, yourHand, '.game__your-score');
-
-        yourHandOutput.textContent = yourHand;
+        while (yourHandOutput.firstChild) {
+            yourHandOutput.removeChild(yourHandOutput.firstChild);
+        }
+        yourHand.forEach(card => {
+            drawCard('.game__your-hand', card);
+        });
         yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
         console.log('deck: ' + deck);
     });
@@ -55,11 +60,21 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(dealerScore);
         while (dealerScore < 17) {
 
-            addCard(deck, dealerHand, '.game__dealer-score');
+            addCard(deck, dealerHand, '.game__dealer-score', true);
             dealerScore = dealerScoreOutput.textContent.replace('Score: ', '');
         }
 
-        dealerHandOutput.textContent = dealerHand;
+        while (dealerHandOutput.firstChild) {
+            dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+        }
+
+        dealerHand.forEach((card, i) => {
+            if (i === 1) {
+                drawCard('.game__dealer-hand', card);
+            } else {
+                drawCard('.game__dealer-hand', card);
+            }
+        });
 
         setTimeout(() => {
             if (dealerScore === 21) {

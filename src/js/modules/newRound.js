@@ -1,10 +1,8 @@
 import { shuffle } from './shuffle';
 import { addCard } from './addCard';
+import { drawCard } from './drawCard';
 
 function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSelector) {
-
-    const yourHandOutput = document.querySelector('.game__your-hand'),
-        dealerHandOutput = document.querySelector('.game__dealer-hand');
 
     deck = shuffle(deck);
 
@@ -15,8 +13,17 @@ function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSele
     addCard(deck, dealerHand, dealerScoreSelector);
     addCard(deck, dealerHand, dealerScoreSelector);
 
-    yourHandOutput.textContent = yourHand;
-    dealerHandOutput.textContent = dealerHand;
+    yourHand.forEach(card => {
+        drawCard('.game__your-hand', card);
+    });
+
+    dealerHand.forEach((card, i) => {
+        if (i === 1) {
+            drawCard('.game__dealer-hand', card, true);
+        } else {
+            drawCard('.game__dealer-hand', card);
+        }
+    });
     console.log('deck: ' + deck);
 }
 

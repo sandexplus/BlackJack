@@ -387,6 +387,32 @@ module.exports = function (target, source) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/correct-is-regexp-logic.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/internals/correct-is-regexp-logic.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (e) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (f) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/create-non-enumerable-property.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/core-js/internals/create-non-enumerable-property.js ***!
@@ -1009,6 +1035,29 @@ module.exports = false;
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/is-regexp.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/core-js/internals/is-regexp.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var MATCH = wellKnownSymbol('match');
+
+// `IsRegExp` abstract operation
+// https://tc39.github.io/ecma262/#sec-isregexp
+module.exports = function (it) {
+  var isRegExp;
+  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/native-symbol.js":
 /*!*********************************************************!*\
   !*** ./node_modules/core-js/internals/native-symbol.js ***!
@@ -1040,6 +1089,24 @@ var nativeFunctionToString = __webpack_require__(/*! ../internals/function-to-st
 var WeakMap = global.WeakMap;
 
 module.exports = typeof WeakMap === 'function' && /native code/.test(nativeFunctionToString.call(WeakMap));
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/not-a-regexp.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/internals/not-a-regexp.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isRegExp = __webpack_require__(/*! ../internals/is-regexp */ "./node_modules/core-js/internals/is-regexp.js");
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
+};
 
 
 /***/ }),
@@ -1785,6 +1852,43 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.string.ends-with.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.string.ends-with.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var notARegExp = __webpack_require__(/*! ../internals/not-a-regexp */ "./node_modules/core-js/internals/not-a-regexp.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+var correctIsRegExpLogic = __webpack_require__(/*! ../internals/correct-is-regexp-logic */ "./node_modules/core-js/internals/correct-is-regexp-logic.js");
+
+var nativeEndsWith = ''.endsWith;
+var min = Math.min;
+
+// `String.prototype.endsWith` method
+// https://tc39.github.io/ecma262/#sec-string.prototype.endswith
+$({ target: 'String', proto: true, forced: !correctIsRegExpLogic('endsWith') }, {
+  endsWith: function endsWith(searchString /* , endPosition = @length */) {
+    var that = String(requireObjectCoercible(this));
+    notARegExp(searchString);
+    var endPosition = arguments.length > 1 ? arguments[1] : undefined;
+    var len = toLength(that.length);
+    var end = endPosition === undefined ? len : min(toLength(endPosition), len);
+    var search = String(searchString);
+    return nativeEndsWith
+      ? nativeEndsWith.call(that, search, end)
+      : that.slice(end - search.length, end) === search;
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.string.replace.js":
 /*!***********************************************************!*\
   !*** ./node_modules/core-js/modules/es.string.replace.js ***!
@@ -1993,10 +2097,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
 
 
-function addCard(deck, hand, scoreSelector) {
+function addCard(deck, hand, scoreSelector, hold) {
   hand.push(deck[0]);
   deck.shift();
-  Object(_checkScore__WEBPACK_IMPORTED_MODULE_0__["checkScore"])(hand, scoreSelector);
+  Object(_checkScore__WEBPACK_IMPORTED_MODULE_0__["checkScore"])(hand, scoreSelector, hold);
 }
 
 
@@ -2027,23 +2131,98 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function checkScore(hand, scoreSelector) {
+  var hold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var regex = /..$/;
   var scoreOutput = document.querySelector(scoreSelector);
   var score = 0;
+  var tempScore = 0;
   hand.forEach(function (element) {
+    tempScore = 0;
+
     if (isNaN(+element.replace(regex, '')) && element.replace(regex, '') !== 'a') {
       score += 10;
+      tempScore += 10;
     } else if (element.replace(regex, '') === 'a') {
       if (score + 11 > 21) {
         score += 1;
+        tempScore += 1;
       } else {
         score += 11;
+        tempScore += 11;
       }
     } else {
       score += +element.replace(regex, '');
+      tempScore += +element.replace(regex, '');
+    }
+
+    if (scoreSelector === '.game__dealer-score' && !hold && element === hand[1] && hand.length > 1) {
+      score -= tempScore;
     }
   });
   scoreOutput.textContent = "Score: ".concat(score);
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/drawCard.js":
+/*!************************************!*\
+  !*** ./src/js/modules/drawCard.js ***!
+  \************************************/
+/*! exports provided: drawCard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawCard", function() { return drawCard; });
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.ends-with */ "./node_modules/core-js/modules/es.string.ends-with.js");
+/* harmony import */ var core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+function drawCard(parentSelector, cardTile) {
+  var hidden = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var cardBorder = document.createElement('div'),
+      cards = document.querySelector(parentSelector),
+      suit = document.createElement('img'),
+      power = document.createElement('div');
+  cardBorder.classList.add('game__card');
+  suit.classList.add('game__suit');
+  power.classList.add('game__power');
+  cardBorder.appendChild(suit);
+  cardBorder.appendChild(power);
+
+  if (hidden) {
+    cardBorder.classList.add('game__card-hidden');
+  }
+
+  if (cardTile.endsWith('s')) {
+    suit.src = '../assets/img/spades.svg';
+    power.textContent = cardTile.replace(/..$/, '');
+  }
+
+  if (cardTile.endsWith('d')) {
+    suit.src = '../assets/img/diamond.svg';
+    power.textContent = cardTile.replace(/..$/, '');
+  }
+
+  if (cardTile.endsWith('c')) {
+    suit.src = '../assets/img/clubs.svg';
+    power.textContent = cardTile.replace(/..$/, '');
+  }
+
+  if (cardTile.endsWith('h')) {
+    suit.src = '../assets/img/heart.svg';
+    power.textContent = cardTile.replace(/..$/, '');
+  }
+
+  cards.appendChild(cardBorder);
 }
 
 
@@ -2060,22 +2239,36 @@ function checkScore(hand, scoreSelector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newRound", function() { return newRound; });
-/* harmony import */ var _shuffle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shuffle */ "./src/js/modules/shuffle.js");
-/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _shuffle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shuffle */ "./src/js/modules/shuffle.js");
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+
+
+
 
 
 
 function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSelector) {
-  var yourHandOutput = document.querySelector('.game__your-hand'),
-      dealerHandOutput = document.querySelector('.game__dealer-hand');
-  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_0__["shuffle"])(deck);
+  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_2__["shuffle"])(deck);
   console.log(deck);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_1__["addCard"])(deck, yourHand, yourScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_1__["addCard"])(deck, yourHand, yourScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_1__["addCard"])(deck, dealerHand, dealerScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_1__["addCard"])(deck, dealerHand, dealerScoreSelector);
-  yourHandOutput.textContent = yourHand;
-  dealerHandOutput.textContent = dealerHand;
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, yourHand, yourScoreSelector);
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, yourHand, yourScoreSelector);
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, dealerHand, dealerScoreSelector);
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, dealerHand, dealerScoreSelector);
+  yourHand.forEach(function (card) {
+    Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__your-hand', card);
+  });
+  dealerHand.forEach(function (card, i) {
+    if (i === 1) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__dealer-hand', card, true);
+    } else {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__dealer-hand', card);
+    }
+  });
   console.log('deck: ' + deck);
 }
 
@@ -2119,13 +2312,21 @@ function shuffle(arr) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _modules_addCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/addCard */ "./src/js/modules/addCard.js");
-/* harmony import */ var _modules_checkScore__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/checkScore */ "./src/js/modules/checkScore.js");
-/* harmony import */ var _modules_newRound__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/newRound */ "./src/js/modules/newRound.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _modules_addCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _modules_checkScore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/checkScore */ "./src/js/modules/checkScore.js");
+/* harmony import */ var _modules_newRound__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/newRound */ "./src/js/modules/newRound.js");
+/* harmony import */ var _modules_drawCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/drawCard */ "./src/js/modules/drawCard.js");
+
+
+
 
 
 
@@ -2151,14 +2352,21 @@ window.addEventListener('DOMContentLoaded', function () {
       dealerScore = 0;
   yourScoreOutput.textContent = "Your score: ".concat(yourScore);
   dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
-  Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_4__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
+  Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
   yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
   dealerScore = +dealerScoreOutput.textContent.replace('Score: ', ''); // Add card to your hand
 
   addCardBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_2__["addCard"])(deck, yourHand, '.game__your-score');
-    yourHandOutput.textContent = yourHand;
+    Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.game__your-score');
+
+    while (yourHandOutput.firstChild) {
+      yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+
+    yourHand.forEach(function (card) {
+      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
+    });
     yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
     console.log('deck: ' + deck);
   }); // Add card to dealer hand
@@ -2168,11 +2376,21 @@ window.addEventListener('DOMContentLoaded', function () {
     console.log(dealerScore);
 
     while (dealerScore < 17) {
-      Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_2__["addCard"])(deck, dealerHand, '.game__dealer-score');
+      Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, dealerHand, '.game__dealer-score', true);
       dealerScore = dealerScoreOutput.textContent.replace('Score: ', '');
     }
 
-    dealerHandOutput.textContent = dealerHand;
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    dealerHand.forEach(function (card, i) {
+      if (i === 1) {
+        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
+      } else {
+        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
+      }
+    });
     setTimeout(function () {
       if (dealerScore === 21) {
         winner.textContent = "Winner: Dealer";
@@ -2203,7 +2421,7 @@ window.addEventListener('DOMContentLoaded', function () {
     dealerHand = [];
     yourScore = 0;
     dealerScore = 0;
-    Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_4__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
+    Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
     yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
     dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
     winner.textContent = "Winner: ";
@@ -2226,9 +2444,9 @@ window.addEventListener('DOMContentLoaded', function () {
     yourScore = JSON.parse(localStorage.getItem('yourScore'));
     dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
     dealerHandOutput.textContent = dealerHand;
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_3__["checkScore"])(dealerHand, '.game__dealer-score');
+    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.game__dealer-score');
     yourHandOutput.textContent = yourHand;
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_3__["checkScore"])(yourHand, '.game__your-score');
+    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.game__your-score');
   });
 });
 

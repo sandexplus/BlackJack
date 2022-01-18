@@ -1,11 +1,11 @@
 import { checkScore } from './checkScore';
 
-function addCard(deck, hand, scoreSelector) {
+function addCard(deck, hand, scoreSelector, hold) {
 
     hand.push(deck[0]);
     deck.shift();
 
-    checkScore(hand, scoreSelector);
+    checkScore(hand, scoreSelector, hold);
 
 }
 
