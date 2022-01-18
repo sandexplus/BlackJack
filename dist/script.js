@@ -2203,22 +2203,22 @@ function drawCard(parentSelector, cardTile) {
   }
 
   if (cardTile.endsWith('s')) {
-    suit.src = '../assets/img/spades.svg';
+    suit.src = './assets/img/spades.svg';
     power.textContent = cardTile.replace(/..$/, '');
   }
 
   if (cardTile.endsWith('d')) {
-    suit.src = '../assets/img/diamond.svg';
+    suit.src = './assets/img/diamond.svg';
     power.textContent = cardTile.replace(/..$/, '');
   }
 
   if (cardTile.endsWith('c')) {
-    suit.src = '../assets/img/clubs.svg';
+    suit.src = './assets/img/clubs.svg';
     power.textContent = cardTile.replace(/..$/, '');
   }
 
   if (cardTile.endsWith('h')) {
-    suit.src = '../assets/img/heart.svg';
+    suit.src = './assets/img/heart.svg';
     power.textContent = cardTile.replace(/..$/, '');
   }
 
@@ -2385,11 +2385,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     dealerHand.forEach(function (card, i) {
-      if (i === 1) {
-        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
-      } else {
-        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
-      }
+      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
     });
     setTimeout(function () {
       if (dealerScore === 21) {
@@ -2421,6 +2417,15 @@ window.addEventListener('DOMContentLoaded', function () {
     dealerHand = [];
     yourScore = 0;
     dealerScore = 0;
+
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    while (yourHandOutput.firstChild) {
+      yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+
     Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
     yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
     dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
@@ -2443,9 +2448,26 @@ window.addEventListener('DOMContentLoaded', function () {
     dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
     yourScore = JSON.parse(localStorage.getItem('yourScore'));
     dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
-    dealerHandOutput.textContent = dealerHand;
+
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    while (yourHandOutput.firstChild) {
+      yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+
+    dealerHand.forEach(function (card, i) {
+      if (i === 1) {
+        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card, true);
+      } else {
+        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
+      }
+    });
     Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.game__dealer-score');
-    yourHandOutput.textContent = yourHand;
+    yourHand.forEach(function (card) {
+      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
+    });
     Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.game__your-score');
   });
 });

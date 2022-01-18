@@ -69,11 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         dealerHand.forEach((card, i) => {
-            if (i === 1) {
-                drawCard('.game__dealer-hand', card);
-            } else {
-                drawCard('.game__dealer-hand', card);
-            }
+            drawCard('.game__dealer-hand', card);
         });
 
         setTimeout(() => {
@@ -117,6 +113,12 @@ window.addEventListener('DOMContentLoaded', () => {
         yourScore = 0;
         dealerScore = 0;
 
+        while (dealerHandOutput.firstChild) {
+            dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+        }
+        while (yourHandOutput.firstChild) {
+            yourHandOutput.removeChild(yourHandOutput.firstChild);
+        }
         newRound(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
         yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
         dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
@@ -145,10 +147,26 @@ window.addEventListener('DOMContentLoaded', () => {
         yourScore = JSON.parse(localStorage.getItem('yourScore'));
         dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
 
-        dealerHandOutput.textContent = dealerHand;
+
+        while (dealerHandOutput.firstChild) {
+            dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+        }
+        while (yourHandOutput.firstChild) {
+            yourHandOutput.removeChild(yourHandOutput.firstChild);
+        }
+
+        dealerHand.forEach((card, i) => {
+            if (i === 1) {
+                drawCard('.game__dealer-hand', card, true);
+            } else {
+                drawCard('.game__dealer-hand', card);
+            }
+        });
         checkScore(dealerHand, '.game__dealer-score');
 
-        yourHandOutput.textContent = yourHand;
+        yourHand.forEach(card => {
+            drawCard('.game__your-hand', card);
+        });
         checkScore(yourHand, '.game__your-score');
     });
 

@@ -14,19 +14,19 @@ function drawCard(parentSelector, cardTile, hidden = false) {
     }
 
     if (cardTile.endsWith('s')) {
-        suit.src = '../assets/img/spades.svg';
+        suit.src = './assets/img/spades.svg';
         power.textContent = cardTile.replace(/..$/, '');
     }
     if (cardTile.endsWith('d')) {
-        suit.src = '../assets/img/diamond.svg';
+        suit.src = './assets/img/diamond.svg';
         power.textContent = cardTile.replace(/..$/, '');
     }
     if (cardTile.endsWith('c')) {
-        suit.src = '../assets/img/clubs.svg';
+        suit.src = './assets/img/clubs.svg';
         power.textContent = cardTile.replace(/..$/, '');
     }
     if (cardTile.endsWith('h')) {
-        suit.src = '../assets/img/heart.svg';
+        suit.src = './assets/img/heart.svg';
         power.textContent = cardTile.replace(/..$/, '');
     }
 
