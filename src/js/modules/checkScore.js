@@ -24,12 +24,17 @@ function checkScore(hand, scoreSelector, hold = false) {
             tempScore += +element.replace(regex, '');
         }
 
-        if (scoreSelector === '.game__dealer-score' && !hold && element === hand[1] && hand.length > 1) {
+        if (scoreSelector === '.btns__dealer-score' && !hold && element === hand[1] && hand.length > 1) {
             score -= tempScore;
         }
     });
 
-    scoreOutput.textContent = `Score: ${score}`;
+    if (scoreSelector === '.btns__your-score') {
+        scoreOutput.textContent = `Your score: ${score}`;
+    } else {
+        scoreOutput.textContent = `Dealer score: ${score}`;
+    }
+
 
 
 }

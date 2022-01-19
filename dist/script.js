@@ -2155,11 +2155,16 @@ function checkScore(hand, scoreSelector) {
       tempScore += +element.replace(regex, '');
     }
 
-    if (scoreSelector === '.game__dealer-score' && !hold && element === hand[1] && hand.length > 1) {
+    if (scoreSelector === '.btns__dealer-score' && !hold && element === hand[1] && hand.length > 1) {
       score -= tempScore;
     }
   });
-  scoreOutput.textContent = "Score: ".concat(score);
+
+  if (scoreSelector === '.btns__your-score') {
+    scoreOutput.textContent = "Your score: ".concat(score);
+  } else {
+    scoreOutput.textContent = "Dealer score: ".concat(score);
+  }
 }
 
 
@@ -2337,14 +2342,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
   var yourHandOutput = document.querySelector('.game__your-hand'),
       dealerHandOutput = document.querySelector('.game__dealer-hand'),
-      yourScoreOutput = document.querySelector('.game__your-score'),
-      dealerScoreOutput = document.querySelector('.game__dealer-score'),
-      winner = document.querySelector('.game__winner'),
+      yourScoreOutput = document.querySelector('.btns__your-score'),
+      dealerScoreOutput = document.querySelector('.btns__dealer-score'),
+      winner = document.querySelector('.btns__winner'),
       saveGame = document.querySelector('.nav__save'),
       continueGame = document.querySelector('.nav__continue'),
       newGame = document.querySelector('.nav__new-game'),
-      addCardBtn = document.querySelector('.game__add-card'),
-      holdBtn = document.querySelector('.game__hold');
+      addCardBtn = document.querySelector('.btns__add-card'),
+      holdBtn = document.querySelector('.btns__hold');
   var deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
       dealerHand = [],
@@ -2352,13 +2357,13 @@ window.addEventListener('DOMContentLoaded', function () {
       dealerScore = 0;
   yourScoreOutput.textContent = "Your score: ".concat(yourScore);
   dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
-  Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
-  yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
-  dealerScore = +dealerScoreOutput.textContent.replace('Score: ', ''); // Add card to your hand
+  Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
+  yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+  dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', ''); // Add card to your hand
 
   addCardBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.game__your-score');
+    Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.btns__your-score');
 
     while (yourHandOutput.firstChild) {
       yourHandOutput.removeChild(yourHandOutput.firstChild);
@@ -2367,7 +2372,7 @@ window.addEventListener('DOMContentLoaded', function () {
     yourHand.forEach(function (card) {
       Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
     });
-    yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
+    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
     console.log('deck: ' + deck);
   }); // Add card to dealer hand
 
@@ -2376,8 +2381,8 @@ window.addEventListener('DOMContentLoaded', function () {
     console.log(dealerScore);
 
     while (dealerScore < 17) {
-      Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, dealerHand, '.game__dealer-score', true);
-      dealerScore = dealerScoreOutput.textContent.replace('Score: ', '');
+      Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, dealerHand, '.btns__dealer-score', true);
+      dealerScore = dealerScoreOutput.textContent.replace('Dealer score: ', '');
     }
 
     while (dealerHandOutput.firstChild) {
@@ -2426,9 +2431,9 @@ window.addEventListener('DOMContentLoaded', function () {
       yourHandOutput.removeChild(yourHandOutput.firstChild);
     }
 
-    Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
-    yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
-    dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
+    Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
+    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+    dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
     winner.textContent = "Winner: ";
   }); // Save game
 
@@ -2464,11 +2469,11 @@ window.addEventListener('DOMContentLoaded', function () {
         Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
       }
     });
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.game__dealer-score');
+    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score');
     yourHand.forEach(function (card) {
       Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
     });
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.game__your-score');
+    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.btns__your-score');
   });
 });
 

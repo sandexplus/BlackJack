@@ -51,59 +51,14 @@ $btn-hold-hover: #de4b9c;
 }
 
 .game {
-    padding-top: 100px;
-    &__wrapper {
-        display: flex;
-        justify-content: flex-start;
-    }
-    &__btn-wrapper {
-        width: 200px;
-        display: flex;
-        flex-direction: column;
-    }
+    padding-top: 50px;
     &__your-hand,
     &__dealer-hand {
         display: block;
     }
-    &__dealer-hand {
+    &__hand {
+        font-size: 25px;
         margin-top: 20px;
-    }
-    &__add-card {
-        padding: 15px 25px;
-        border-radius: 10px;
-        background-color: $btn-game;
-        text-decoration: none;
-        color: #000;
-        transition: 0.5s all;
-        &:hover {
-            background-color: $btn-game-hover;
-        }
-    }
-    &__hold {
-        margin-top: 20px;
-        padding: 15px 25px;
-        border-radius: 10px;
-        background-color: $btn-hold;
-        text-decoration: none;
-        color: #000;
-        transition: 0.5s all;
-        &:hover {
-            background-color: $btn-hold-hover;
-        }
-    }
-    &__board-wrapper {
-        margin-left: 200px;
-        display: flex;
-    }
-    &__winner {
-        font-size: 30px;
-        margin-left: 50px;
-    }
-    &__score-wrapper {
-        margin-left: 50px;
-    }
-    &__dealer-score {
-        margin-top: 30px;
     }
     &__card {
         border: 1px solid #000;
@@ -132,5 +87,41 @@ $btn-hold-hover: #de4b9c;
         & :nth-child(1n) {
             visibility: hidden;
         }
+    }
+}
+
+.btns {
+    &__btn-wrapper {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-between;
+    }
+    &__add-card {
+        padding: 15px 25px;
+        border-radius: 10px;
+        background-color: $btn-game;
+        text-decoration: none;
+        color: #000;
+        transition: 0.5s all;
+        &:hover {
+            background-color: $btn-game-hover;
+        }
+    }
+    &__hold {
+        padding: 15px 25px;
+        border-radius: 10px;
+        background-color: $btn-hold;
+        text-decoration: none;
+        color: #000;
+        transition: 0.5s all;
+        &:hover {
+            background-color: $btn-hold-hover;
+        }
+    }
+    &__score {
+        margin-top: 15px;
+    }
+    &__winner {
+        font-size: 30px;
     }
 }

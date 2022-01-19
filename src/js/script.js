@@ -8,14 +8,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const yourHandOutput = document.querySelector('.game__your-hand'),
         dealerHandOutput = document.querySelector('.game__dealer-hand'),
-        yourScoreOutput = document.querySelector('.game__your-score'),
-        dealerScoreOutput = document.querySelector('.game__dealer-score'),
-        winner = document.querySelector('.game__winner'),
+        yourScoreOutput = document.querySelector('.btns__your-score'),
+        dealerScoreOutput = document.querySelector('.btns__dealer-score'),
+        winner = document.querySelector('.btns__winner'),
         saveGame = document.querySelector('.nav__save'),
         continueGame = document.querySelector('.nav__continue'),
         newGame = document.querySelector('.nav__new-game'),
-        addCardBtn = document.querySelector('.game__add-card'),
-        holdBtn = document.querySelector('.game__hold');
+        addCardBtn = document.querySelector('.btns__add-card'),
+        holdBtn = document.querySelector('.btns__hold');
 
     let deck = [
         '2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s',
@@ -33,23 +33,23 @@ window.addEventListener('DOMContentLoaded', () => {
     dealerScoreOutput.textContent = `Dealer score: ${dealerScore}`;
 
 
-    newRound(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
+    newRound(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
 
-    yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
-    dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
+    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+    dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
 
     // Add card to your hand
     addCardBtn.addEventListener('click', (e) => {
         e.preventDefault();
 
-        addCard(deck, yourHand, '.game__your-score');
+        addCard(deck, yourHand, '.btns__your-score');
         while (yourHandOutput.firstChild) {
             yourHandOutput.removeChild(yourHandOutput.firstChild);
         }
         yourHand.forEach(card => {
             drawCard('.game__your-hand', card);
         });
-        yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
+        yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
         console.log('deck: ' + deck);
     });
 
@@ -60,8 +60,8 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(dealerScore);
         while (dealerScore < 17) {
 
-            addCard(deck, dealerHand, '.game__dealer-score', true);
-            dealerScore = dealerScoreOutput.textContent.replace('Score: ', '');
+            addCard(deck, dealerHand, '.btns__dealer-score', true);
+            dealerScore = dealerScoreOutput.textContent.replace('Dealer score: ', '');
         }
 
         while (dealerHandOutput.firstChild) {
@@ -119,9 +119,9 @@ window.addEventListener('DOMContentLoaded', () => {
         while (yourHandOutput.firstChild) {
             yourHandOutput.removeChild(yourHandOutput.firstChild);
         }
-        newRound(deck, yourHand, dealerHand, '.game__your-score', '.game__dealer-score');
-        yourScore = +yourScoreOutput.textContent.replace('Score: ', '');
-        dealerScore = +dealerScoreOutput.textContent.replace('Score: ', '');
+        newRound(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
+        yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+        dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
         winner.textContent = `Winner: `;
     });
 
@@ -162,12 +162,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 drawCard('.game__dealer-hand', card);
             }
         });
-        checkScore(dealerHand, '.game__dealer-score');
+        checkScore(dealerHand, '.btns__dealer-score');
 
         yourHand.forEach(card => {
             drawCard('.game__your-hand', card);
         });
-        checkScore(yourHand, '.game__your-score');
+        checkScore(yourHand, '.btns__your-score');
     });
 
 });
