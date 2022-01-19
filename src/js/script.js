@@ -39,9 +39,7 @@ window.addEventListener('DOMContentLoaded', () => {
     dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
 
     // Add card to your hand
-    addCardBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-
+    function addCardClick() {
         addCard(deck, yourHand, '.btns__your-score');
         while (yourHandOutput.firstChild) {
             yourHandOutput.removeChild(yourHandOutput.firstChild);
@@ -50,14 +48,19 @@ window.addEventListener('DOMContentLoaded', () => {
             drawCard('.game__your-hand', card);
         });
         yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+        if (yourScore >= 21) {
+            holdBtn.click();
+            addCardBtn.removeEventListener('click', addCardClick);
+            holdBtn.removeEventListener('click', holdClick);
+        }
         console.log('deck: ' + deck);
-    });
+    }
+
+    addCardBtn.addEventListener('click', addCardClick);
 
 
     // Add card to dealer hand
-    holdBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log(dealerScore);
+    function holdClick() {
         while (dealerScore < 17) {
 
             addCard(deck, dealerHand, '.btns__dealer-score', true);
@@ -68,34 +71,35 @@ window.addEventListener('DOMContentLoaded', () => {
             dealerHandOutput.removeChild(dealerHandOutput.firstChild);
         }
 
-        dealerHand.forEach((card, i) => {
+        dealerHand.forEach(card => {
             drawCard('.game__dealer-hand', card);
         });
 
-        setTimeout(() => {
-            if (dealerScore === 21) {
+        if (+dealerScore === 21) {
+            winner.textContent = `Winner: Dealer`;
+        } else if (dealerScore > 21) {
+            if (yourScore > 21) {
                 winner.textContent = `Winner: Dealer`;
-            } else if (dealerScore > 21) {
-                if (yourScore > 21) {
+            } else {
+                winner.textContent = `Winner: You`;
+            }
+        } else if (dealerScore < 21) {
+            if (yourScore > 21) {
+                winner.textContent = `Winner: Dealer`;
+            } else {
+                if (+dealerScore >= +yourScore) {
                     winner.textContent = `Winner: Dealer`;
                 } else {
                     winner.textContent = `Winner: You`;
                 }
-            } else if (dealerScore < 21) {
-                if (yourScore > 21) {
-                    winner.textContent = `Winner: Dealer`;
-                } else {
-                    if (dealerScore >= yourScore) {
-                        winner.textContent = `Winner: Dealer`;
-                    } else {
-                        winner.textContent = `Winner: You`;
-                    }
-                }
             }
+        }
 
-        }, 1000);
+        addCardBtn.removeEventListener('click', addCardClick);
+        holdBtn.removeEventListener('click', holdClick);
+    }
 
-    });
+    holdBtn.addEventListener('click', holdClick);
 
 
     // Start new game
@@ -123,6 +127,8 @@ window.addEventListener('DOMContentLoaded', () => {
         yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
         dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
         winner.textContent = `Winner: `;
+        addCardBtn.addEventListener('click', addCardClick);
+        holdBtn.addEventListener('click', holdClick);
     });
 
     // Save game
