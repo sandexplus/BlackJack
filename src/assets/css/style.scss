@@ -118,10 +118,16 @@ $btn-hold-hover: #de4b9c;
             background-color: $btn-hold-hover;
         }
     }
-    &__score {
-        margin-top: 15px;
-    }
     &__winner {
         font-size: 30px;
+        margin-top: 5px;
+    }
+    &__your-score {
+        padding: 15px 25px;
+        background-color: #98e38d;
+    }
+    &__dealer-score {
+        padding: 15px 25px;
+        background-color: #ffa089;
     }
 }
