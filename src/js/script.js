@@ -31,9 +31,6 @@ window.addEventListener('DOMContentLoaded', () => {
         yourScore = 0,
         dealerScore = 0;
 
-    yourScoreOutput.textContent = `Your score: ${yourScore}`;
-    dealerScoreOutput.textContent = `Dealer score: ${dealerScore}`;
-
 
     newRound(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
 
@@ -44,6 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Add card to your hand
     function addCardClick() {
+        dealerScore = checkScore(dealerHand, '.btns__dealer-score', true, false);
         addCard(deck, yourHand, '.btns__your-score');
         while (yourHandOutput.firstChild) {
             yourHandOutput.removeChild(yourHandOutput.firstChild);
@@ -69,12 +67,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Add card to dealer hand
     function holdClick() {
+        dealerScore = checkScore(dealerHand, '.btns__dealer-score', true, false);
+
         while (dealerScore < 17) {
 
             addCard(deck, dealerHand, '.btns__dealer-score', true);
             dealerScore = dealerScoreOutput.textContent.replace('Dealer score: ', '');
         }
 
+        dealerScoreOutput.textContent = `Dealer score: ${dealerScore}`;
         while (dealerHandOutput.firstChild) {
             dealerHandOutput.removeChild(dealerHandOutput.firstChild);
         }

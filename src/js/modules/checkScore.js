@@ -1,4 +1,4 @@
-function checkScore(hand, scoreSelector, hold = false) {
+function checkScore(hand, scoreSelector, hold = false, write = true) {
     const regex = /..$/;
     const scoreOutput = document.querySelector(scoreSelector);
 
@@ -29,14 +29,15 @@ function checkScore(hand, scoreSelector, hold = false) {
         }
     });
 
-    if (scoreSelector === '.btns__your-score') {
-        scoreOutput.textContent = `Your score: ${score}`;
+    if (write) {
+        if (scoreSelector === '.btns__your-score') {
+            scoreOutput.textContent = `Your score: ${score}`;
+        } else {
+            scoreOutput.textContent = `Dealer score: ${score}`;
+        }
     } else {
-        scoreOutput.textContent = `Dealer score: ${score}`;
+        return score;
     }
-
-
-
 }
 
 export { checkScore };

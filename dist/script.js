@@ -2132,6 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function checkScore(hand, scoreSelector) {
   var hold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var write = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
   var regex = /..$/;
   var scoreOutput = document.querySelector(scoreSelector);
   var score = 0;
@@ -2160,10 +2161,14 @@ function checkScore(hand, scoreSelector) {
     }
   });
 
-  if (scoreSelector === '.btns__your-score') {
-    scoreOutput.textContent = "Your score: ".concat(score);
+  if (write) {
+    if (scoreSelector === '.btns__your-score') {
+      scoreOutput.textContent = "Your score: ".concat(score);
+    } else {
+      scoreOutput.textContent = "Dealer score: ".concat(score);
+    }
   } else {
-    scoreOutput.textContent = "Dealer score: ".concat(score);
+    return score;
   }
 }
 
@@ -2384,14 +2389,13 @@ window.addEventListener('DOMContentLoaded', function () {
       dealerHand = [],
       yourScore = 0,
       dealerScore = 0;
-  yourScoreOutput.textContent = "Your score: ".concat(yourScore);
-  dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
   Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
   yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
   dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.popup', '.popup__close'); // Add card to your hand
 
   function addCardClick() {
+    dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
     Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.btns__your-score');
 
     while (yourHandOutput.firstChild) {
@@ -2419,10 +2423,14 @@ window.addEventListener('DOMContentLoaded', function () {
   addCardBtn.addEventListener('click', addCardClick); // Add card to dealer hand
 
   function holdClick() {
+    dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
+
     while (dealerScore < 17) {
       Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, dealerHand, '.btns__dealer-score', true);
       dealerScore = dealerScoreOutput.textContent.replace('Dealer score: ', '');
     }
+
+    dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
 
     while (dealerHandOutput.firstChild) {
       dealerHandOutput.removeChild(dealerHandOutput.firstChild);
