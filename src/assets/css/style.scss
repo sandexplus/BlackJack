@@ -5,6 +5,12 @@ $btn-game: #ccccff;
 $btn-game-hover: #6666ff;
 $btn-hold: #eda1cb;
 $btn-hold-hover: #de4b9c;
+$your-score: #98e38d;
+$dealer-score: #ffa089;
+$btn-bet: #99e6ff;
+$btn-bet-hover: #66d9ff;
+$btn-reset: #fc3a5a;
+$btn-reset-hover: #fc0a32;
 * {
     margin: 0;
     padding: 0;
@@ -72,6 +78,7 @@ body {
         margin-left: 10px;
         display: inline-block;
         margin-top: 10px;
+        box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.2);
     }
     &__suit {
         width: 50px;
@@ -106,37 +113,42 @@ body {
     &__score-wrapper {
         display: flex;
     }
-    &__add-card {
+    &__btn {
         padding: 15px 25px;
         border-radius: 10px;
-        background-color: $btn-game;
         text-decoration: none;
         color: #000;
         transition: 0.5s all;
+    }
+    &__add-card {
+        background-color: $btn-game;
         &:hover {
             background-color: $btn-game-hover;
         }
     }
     &__hold {
         margin-left: 30px;
-        padding: 15px 25px;
-        border-radius: 10px;
         background-color: $btn-hold;
-        text-decoration: none;
-        color: #000;
-        transition: 0.5s all;
         &:hover {
             background-color: $btn-hold-hover;
         }
     }
+    &__bet {
+        background-color: $btn-bet;
+        text-transform: uppercase;
+        font-weight: 500;
+        &:hover {
+            background-color: $btn-bet-hover;
+        }
+    }
     &__your-score {
         padding: 15px 25px;
-        background-color: #98e38d;
+        background-color: $your-score;
         margin-right: 30px;
     }
     &__dealer-score {
         padding: 15px 25px;
-        background-color: #ffa089;
+        background-color: $dealer-score;
     }
 }
 
@@ -165,5 +177,64 @@ body {
     }
     &__winner {
         font-size: 50px;
+    }
+}
+
+.bet {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.65);
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    &__wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 600px;
+        min-height: 300px;
+        padding: 25px 50px 25px;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    &__close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 25px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    &__title {
+        font-size: 50px;
+        text-align: center;
+        margin-top: 10px;
+    }
+    &__bank,
+    &__your-bet {
+        font-size: 25px;
+        text-align-last: left;
+        margin-top: 50px;
+    }
+    &__input {
+        width: 250px;
+        margin-top: 15px;
+        display: block;
+    }
+    &__make-bet {
+        background-color: $btn;
+        margin-top: 15px;
+        display: inline-block;
+        &:hover {
+            background-color: $btn-hover;
+        }
+    }
+    &__reset {
+        background-color: $btn-reset;
+        margin-top: 150px;
+        float: right;
+        &:hover {
+            background-color: $btn-reset-hover;
+        }
     }
 }

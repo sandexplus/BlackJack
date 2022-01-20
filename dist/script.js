@@ -2084,6 +2084,43 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/js/modules/addBet.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/addBet.js ***!
+  \**********************************/
+/*! exports provided: addBet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addBet", function() { return addBet; });
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector) {
+  var btn = document.querySelector(btnSelector),
+      bet = document.querySelector(inputSelector),
+      bankTitle = document.querySelector(bankSelector),
+      newGame = document.querySelector(newGameSelector);
+  var bank;
+
+  if (localStorage.getItem('bank')) {
+    bank = localStorage.getItem('bank');
+  } else {
+    bank = 1000;
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    newGame.click();
+    bank -= +bet.value;
+    localStorage.setItem('bank', bank);
+    localStorage.setItem('bet', +localStorage.getItem('bet') + +bet.value);
+    bankTitle.textContent = "Your bank: ".concat(bank, "$");
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/addCard.js":
 /*!***********************************!*\
   !*** ./src/js/modules/addCard.js ***!
@@ -2312,6 +2349,28 @@ function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSele
 
 /***/ }),
 
+/***/ "./src/js/modules/range.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/range.js ***!
+  \*********************************/
+/*! exports provided: range */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "range", function() { return range; });
+function range(rangeSelector, betSelector) {
+  var range = document.querySelector(rangeSelector),
+      bet = document.querySelector(betSelector);
+  range.addEventListener('input', function () {
+    bet.textContent = "Your bet: ".concat(range.value, "$");
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/shuffle.js":
 /*!***********************************!*\
   !*** ./src/js/modules/shuffle.js ***!
@@ -2361,6 +2420,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_newRound__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/newRound */ "./src/js/modules/newRound.js");
 /* harmony import */ var _modules_drawCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/drawCard */ "./src/js/modules/drawCard.js");
 /* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+/* harmony import */ var _modules_range__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/range */ "./src/js/modules/range.js");
+/* harmony import */ var _modules_addBet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/addBet */ "./src/js/modules/addBet.js");
+
+
 
 
 
@@ -2383,18 +2446,38 @@ window.addEventListener('DOMContentLoaded', function () {
       newGame = document.querySelector('.nav__new-game'),
       addCardBtn = document.querySelector('.btns__add-card'),
       holdBtn = document.querySelector('.btns__hold'),
-      modalSelector = document.querySelector('.popup');
+      modalSelector = document.querySelector('.popup'),
+      betBtn = document.querySelector('.btns__bet'),
+      betModal = document.querySelector('.bet'),
+      bankSelector = document.querySelector('.bet__bank'),
+      resetBank = document.querySelector('.bet__reset');
   var deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
       dealerHand = [],
       yourScore = 0,
-      dealerScore = 0;
+      dealerScore = 0,
+      bank = 0;
+
+  if (localStorage.getItem('bank')) {
+    bank = localStorage.getItem('bank');
+  } else {
+    bank = 1000;
+  }
+
   Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
   yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
   dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.popup', '.popup__close'); // Add card to your hand
+  bankSelector.textContent = "Your bank: ".concat(bank, "$");
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.popup', '.popup__close');
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.bet', '.bet__close');
+  Object(_modules_range__WEBPACK_IMPORTED_MODULE_9__["range"])('.bet__input', '.bet__your-bet');
+  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_10__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game'); // Add card to your hand
 
   function addCardClick() {
+    if (+localStorage.getItem('bet') <= 0 || !localStorage.getItem('bet')) {
+      return;
+    }
+
     dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
     Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.btns__your-score');
 
@@ -2414,7 +2497,7 @@ window.addEventListener('DOMContentLoaded', function () {
       newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
       setTimeout(function () {
         modalSelector.style.display = 'block';
-      }, 2000);
+      }, 1000);
     }
 
     console.log('deck: ' + deck);
@@ -2423,6 +2506,10 @@ window.addEventListener('DOMContentLoaded', function () {
   addCardBtn.addEventListener('click', addCardClick); // Add card to dealer hand
 
   function holdClick() {
+    if (+localStorage.getItem('bet') <= 0 || !localStorage.getItem('bet')) {
+      return;
+    }
+
     dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
 
     while (dealerScore < 17) {
@@ -2441,34 +2528,57 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
     if (+dealerScore === 21) {
-      winner.textContent = "Winner: Dealer";
+      if (+yourScore === 21) {
+        winner.textContent = "Draw";
+      } else {
+        winner.textContent = "Winner: Dealer";
+        localStorage.setItem('bet', 0);
+      }
     } else if (dealerScore > 21) {
       if (yourScore > 21) {
         winner.textContent = "Winner: Dealer";
+        localStorage.setItem('bet', 0);
       } else {
         winner.textContent = "Winner: You";
+
+        if (+yourScore === 21) {
+          localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+        } else {
+          localStorage.setItem('bet', localStorage.getItem('bet') * 1.5);
+        }
       }
     } else if (dealerScore < 21) {
       if (yourScore > 21) {
         winner.textContent = "Winner: Dealer";
+        localStorage.setItem('bet', 0);
       } else {
         if (+dealerScore >= +yourScore) {
           winner.textContent = "Winner: Dealer";
+          localStorage.setItem('bet', 0);
         } else {
           winner.textContent = "Winner: You";
+          localStorage.setItem('bet', localStorage.getItem('bet') * 1.5);
         }
       }
     }
 
+    localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
+    localStorage.setItem('bet', 0);
+    bankSelector.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
     addCardBtn.removeEventListener('click', addCardClick);
     holdBtn.removeEventListener('click', holdClick);
     newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
     setTimeout(function () {
       modalSelector.style.display = 'block';
-    }, 2000);
+    }, 1000);
   }
 
-  holdBtn.addEventListener('click', holdClick); // Start new game
+  holdBtn.addEventListener('click', holdClick); // Bets
+
+  betBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    betModal.style.display = 'block';
+  }); // Start new game
 
   newGame.addEventListener('click', function (e) {
     e.preventDefault();
@@ -2493,6 +2603,7 @@ window.addEventListener('DOMContentLoaded', function () {
     addCardBtn.addEventListener('click', addCardClick);
     holdBtn.addEventListener('click', holdClick);
     newGame.style.boxShadow = '';
+    localStorage.setItem('bet', 0);
   }); // Save game
 
   saveGame.addEventListener('click', function (e) {
@@ -2502,6 +2613,8 @@ window.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
     localStorage.setItem('yourScore', JSON.stringify(yourScore));
     localStorage.setItem('dealerScore', JSON.stringify(dealerScore));
+    localStorage.setItem('savedBank', bank);
+    localStorage.setItem('savedBet', localStorage.getItem('bet'));
   }); // Continue game
 
   continueGame.addEventListener('click', function (e) {
@@ -2511,6 +2624,9 @@ window.addEventListener('DOMContentLoaded', function () {
     dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
     yourScore = JSON.parse(localStorage.getItem('yourScore'));
     dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
+    bank = localStorage.getItem('savedBank');
+    localStorage.setItem('bank', localStorage.getItem('savedBank'));
+    localStorage.setItem('bet', localStorage.getItem('savedBet'));
 
     while (dealerHandOutput.firstChild) {
       dealerHandOutput.removeChild(dealerHandOutput.firstChild);
@@ -2532,6 +2648,13 @@ window.addEventListener('DOMContentLoaded', function () {
       Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
     });
     Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.btns__your-score');
+  }); //Reset a bank
+
+  resetBank.addEventListener('click', function (e) {
+    e.preventDefault();
+    localStorage.setItem('bank', 1000);
+    bank = 1000;
+    bankSelector.textContent = "Your bank: ".concat(bank, "$");
   });
 });
 
