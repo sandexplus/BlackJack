@@ -2407,6 +2407,7 @@ window.addEventListener('DOMContentLoaded', function () {
       holdBtn.click();
       addCardBtn.removeEventListener('click', addCardClick);
       holdBtn.removeEventListener('click', holdClick);
+      newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
       setTimeout(function () {
         modalSelector.style.display = 'block';
       }, 2000);
@@ -2453,6 +2454,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     addCardBtn.removeEventListener('click', addCardClick);
     holdBtn.removeEventListener('click', holdClick);
+    newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
     setTimeout(function () {
       modalSelector.style.display = 'block';
     }, 2000);
@@ -2482,6 +2484,7 @@ window.addEventListener('DOMContentLoaded', function () {
     winner.textContent = "Winner: ";
     addCardBtn.addEventListener('click', addCardClick);
     holdBtn.addEventListener('click', holdClick);
+    newGame.style.boxShadow = '';
   }); // Save game
 
   saveGame.addEventListener('click', function (e) {
