@@ -2099,18 +2099,18 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector) {
       bet = document.querySelector(inputSelector),
       bankTitle = document.querySelector(bankSelector),
       newGame = document.querySelector(newGameSelector);
-  var bank;
-
-  if (localStorage.getItem('bank')) {
-    bank = localStorage.getItem('bank');
-  } else {
-    bank = 1000;
-  }
-
   btn.addEventListener('click', function (e) {
     e.preventDefault();
-    newGame.click();
+    var bank;
+
+    if (localStorage.getItem('bank')) {
+      bank = localStorage.getItem('bank');
+    } else {
+      bank = 1000;
+    }
+
     bank -= +bet.value;
+    newGame.click();
     localStorage.setItem('bank', bank);
     localStorage.setItem('bet', +localStorage.getItem('bet') + +bet.value);
     bankTitle.textContent = "Your bank: ".concat(bank, "$");
@@ -2551,6 +2551,9 @@ window.addEventListener('DOMContentLoaded', function () {
       if (yourScore > 21) {
         winner.textContent = "Winner: Dealer";
         localStorage.setItem('bet', 0);
+      } else if (+yourScore === 21) {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2);
       } else {
         if (+dealerScore >= +yourScore) {
           winner.textContent = "Winner: Dealer";

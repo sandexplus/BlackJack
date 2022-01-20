@@ -131,6 +131,9 @@ window.addEventListener('DOMContentLoaded', () => {
             if (yourScore > 21) {
                 winner.textContent = `Winner: Dealer`;
                 localStorage.setItem('bet', 0);
+            } else if (+yourScore === 21) {
+                winner.textContent = `Winner: You`;
+                localStorage.setItem('bet', localStorage.getItem('bet') * 2);
             } else {
                 if (+dealerScore >= +yourScore) {
                     winner.textContent = `Winner: Dealer`;
@@ -141,7 +144,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
         localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
         localStorage.setItem('bet', 0);
 
