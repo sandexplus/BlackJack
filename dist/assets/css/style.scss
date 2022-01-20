@@ -12,6 +12,10 @@ $btn-hold-hover: #de4b9c;
     font-family: 'Roboto', sans-serif;
 }
 
+body {
+    position: relative;
+}
+
 .container {
     max-width: 60%;
     margin: 0 auto;
@@ -96,6 +100,12 @@ $btn-hold-hover: #de4b9c;
         display: flex;
         justify-content: space-between;
     }
+    &__btns {
+        display: flex;
+    }
+    &__score-wrapper {
+        display: flex;
+    }
     &__add-card {
         padding: 15px 25px;
         border-radius: 10px;
@@ -108,6 +118,7 @@ $btn-hold-hover: #de4b9c;
         }
     }
     &__hold {
+        margin-left: 30px;
         padding: 15px 25px;
         border-radius: 10px;
         background-color: $btn-hold;
@@ -118,16 +129,41 @@ $btn-hold-hover: #de4b9c;
             background-color: $btn-hold-hover;
         }
     }
-    &__winner {
-        font-size: 30px;
-        margin-top: 5px;
-    }
     &__your-score {
         padding: 15px 25px;
         background-color: #98e38d;
+        margin-right: 30px;
     }
     &__dealer-score {
         padding: 15px 25px;
         background-color: #ffa089;
+    }
+}
+
+.popup {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.65);
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    &__wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 150px;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    &__close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 25px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    &__winner {
+        font-size: 50px;
     }
 }

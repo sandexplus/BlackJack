@@ -2,6 +2,7 @@ import { addCard } from './modules/addCard';
 import { checkScore } from './modules/checkScore';
 import { newRound } from './modules/newRound';
 import { drawCard } from './modules/drawCard';
+import { modal } from './modules/modal';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -10,12 +11,13 @@ window.addEventListener('DOMContentLoaded', () => {
         dealerHandOutput = document.querySelector('.game__dealer-hand'),
         yourScoreOutput = document.querySelector('.btns__your-score'),
         dealerScoreOutput = document.querySelector('.btns__dealer-score'),
-        winner = document.querySelector('.btns__winner'),
+        winner = document.querySelector('.popup__winner'),
         saveGame = document.querySelector('.nav__save'),
         continueGame = document.querySelector('.nav__continue'),
         newGame = document.querySelector('.nav__new-game'),
         addCardBtn = document.querySelector('.btns__add-card'),
-        holdBtn = document.querySelector('.btns__hold');
+        holdBtn = document.querySelector('.btns__hold'),
+        modalSelector = document.querySelector('.popup');
 
     let deck = [
         '2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s',
@@ -38,6 +40,8 @@ window.addEventListener('DOMContentLoaded', () => {
     yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
     dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
 
+    modal('.popup', '.popup__close');
+
     // Add card to your hand
     function addCardClick() {
         addCard(deck, yourHand, '.btns__your-score');
@@ -52,6 +56,9 @@ window.addEventListener('DOMContentLoaded', () => {
             holdBtn.click();
             addCardBtn.removeEventListener('click', addCardClick);
             holdBtn.removeEventListener('click', holdClick);
+            setTimeout(() => {
+                modalSelector.style.display = 'block';
+            }, 2000);
         }
         console.log('deck: ' + deck);
     }
@@ -97,6 +104,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
         addCardBtn.removeEventListener('click', addCardClick);
         holdBtn.removeEventListener('click', holdClick);
+        setTimeout(() => {
+            modalSelector.style.display = 'block';
+        }, 2000);
     }
 
     holdBtn.addEventListener('click', holdClick);

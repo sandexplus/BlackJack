@@ -2234,6 +2234,32 @@ function drawCard(parentSelector, cardTile) {
 
 /***/ }),
 
+/***/ "./src/js/modules/modal.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/modal.js ***!
+  \*********************************/
+/*! exports provided: modal */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modal", function() { return modal; });
+function modal(modalSelector, closeSelector) {
+  var modal = document.querySelector(modalSelector),
+      close = document.querySelector(closeSelector);
+  modal.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (e.target && e.target === modal || e.target === close) {
+      modal.style.display = 'none';
+    }
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/newRound.js":
 /*!************************************!*\
   !*** ./src/js/modules/newRound.js ***!
@@ -2329,6 +2355,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_checkScore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/checkScore */ "./src/js/modules/checkScore.js");
 /* harmony import */ var _modules_newRound__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/newRound */ "./src/js/modules/newRound.js");
 /* harmony import */ var _modules_drawCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/drawCard */ "./src/js/modules/drawCard.js");
+/* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+
 
 
 
@@ -2344,12 +2372,13 @@ window.addEventListener('DOMContentLoaded', function () {
       dealerHandOutput = document.querySelector('.game__dealer-hand'),
       yourScoreOutput = document.querySelector('.btns__your-score'),
       dealerScoreOutput = document.querySelector('.btns__dealer-score'),
-      winner = document.querySelector('.btns__winner'),
+      winner = document.querySelector('.popup__winner'),
       saveGame = document.querySelector('.nav__save'),
       continueGame = document.querySelector('.nav__continue'),
       newGame = document.querySelector('.nav__new-game'),
       addCardBtn = document.querySelector('.btns__add-card'),
-      holdBtn = document.querySelector('.btns__hold');
+      holdBtn = document.querySelector('.btns__hold'),
+      modalSelector = document.querySelector('.popup');
   var deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
       dealerHand = [],
@@ -2359,7 +2388,8 @@ window.addEventListener('DOMContentLoaded', function () {
   dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
   Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
   yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
-  dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', ''); // Add card to your hand
+  dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.popup', '.popup__close'); // Add card to your hand
 
   function addCardClick() {
     Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.btns__your-score');
@@ -2377,6 +2407,9 @@ window.addEventListener('DOMContentLoaded', function () {
       holdBtn.click();
       addCardBtn.removeEventListener('click', addCardClick);
       holdBtn.removeEventListener('click', holdClick);
+      setTimeout(function () {
+        modalSelector.style.display = 'block';
+      }, 2000);
     }
 
     console.log('deck: ' + deck);
@@ -2420,6 +2453,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
     addCardBtn.removeEventListener('click', addCardClick);
     holdBtn.removeEventListener('click', holdClick);
+    setTimeout(function () {
+      modalSelector.style.display = 'block';
+    }, 2000);
   }
 
   holdBtn.addEventListener('click', holdClick); // Start new game
