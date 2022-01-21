@@ -34,7 +34,7 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
             drawCard('.game__dealer-hand', card);
         });
 
-        checkWin(yourScore, dealerScore, '.popup__winner');
+        checkWin(yourScore, dealerScore, '.popup__winner', '.popup__reward');
 
         localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
         localStorage.setItem('bet', 0);

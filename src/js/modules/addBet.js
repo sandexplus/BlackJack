@@ -41,7 +41,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         holdBtnBtn.style.display = 'block';
         betBtn.style.display = 'block';
         newGame.style.boxShadow = '';
-        newRound('.btns__your-score', '.btns__dealer-score', '.popup__winner', '.nav__new-game', '.popup');
+        newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward');
     });
 }
 

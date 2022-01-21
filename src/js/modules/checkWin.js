@@ -1,5 +1,6 @@
-function checkWin(yourScore, dealerScore, winnerSelector) {
-    const winner = document.querySelector(winnerSelector);
+function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
+    const winner = document.querySelector(winnerSelector),
+        reward = document.querySelector(rewardSelector);
 
     if (dealerScore === 21) {
         if (yourScore < 21) {
@@ -18,10 +19,12 @@ function checkWin(yourScore, dealerScore, winnerSelector) {
         if (yourScore < 21) {
             winner.textContent = `Winner: You`;
             localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+            reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
         }
         if (yourScore === 21) {
             winner.textContent = `Winner: You`;
             localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+            reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
         }
         if (yourScore > 21) {
             winner.textContent = `Winner: Dealer`;
@@ -40,11 +43,13 @@ function checkWin(yourScore, dealerScore, winnerSelector) {
             if (yourScore > dealerScore) {
                 winner.textContent = `Winner: You`;
                 localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+                reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
             }
         }
         if (yourScore === 21) {
             winner.textContent = `Winner: You`;
             localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+            reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
         }
         if (yourScore > 21) {
             winner.textContent = `Winner: Dealer`;
