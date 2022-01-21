@@ -2661,14 +2661,16 @@ function modal(modalSelector, closeSelector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newGame", function() { return newGame; });
-function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector) {
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector) {
   var newGameBtn = document.querySelector(newGameSelector),
       btns = document.querySelector(btnsSelector),
       game = document.querySelector(gameSelector),
       betPopup = document.querySelector(betPopupSelector),
       bank = document.querySelector(bankSelector),
       dealerHandOutput = document.querySelector(dealerHandSelector),
-      yourHandOutput = document.querySelector(yourHandSelector);
+      yourHandOutput = document.querySelector(yourHandSelector),
+      winner = document.querySelector(winnerSelector),
+      reward = document.querySelector(rewardSelector);
 
   if (localStorage.getItem('bank')) {
     bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
@@ -2688,6 +2690,8 @@ function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, 
     dealerHandOutput.removeChild(dealerHandOutput.firstChild);
   }
 
+  winner.textContent = "";
+  reward.textContent = "";
   btns.style.display = 'none';
   game.style.display = 'none';
 
@@ -2721,7 +2725,7 @@ function newGameBtn(newGameSelector) {
   var newGameBtn = document.querySelector(newGameSelector);
   newGameBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    Object(_newGame__WEBPACK_IMPORTED_MODULE_1__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand');
+    Object(_newGame__WEBPACK_IMPORTED_MODULE_1__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
   });
 }
 
@@ -3006,7 +3010,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand');
+  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.popup', '.popup__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.bet', '.bet__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.black-jack', '.black-jack__close');

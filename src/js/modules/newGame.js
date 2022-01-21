@@ -1,11 +1,13 @@
-function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector) {
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector) {
     const newGameBtn = document.querySelector(newGameSelector),
         btns = document.querySelector(btnsSelector),
         game = document.querySelector(gameSelector),
         betPopup = document.querySelector(betPopupSelector),
         bank = document.querySelector(bankSelector),
         dealerHandOutput = document.querySelector(dealerHandSelector),
-        yourHandOutput = document.querySelector(yourHandSelector);
+        yourHandOutput = document.querySelector(yourHandSelector),
+        winner = document.querySelector(winnerSelector),
+        reward = document.querySelector(rewardSelector);
 
     if (localStorage.getItem('bank')) {
         bank.textContent = `Your bank: ${localStorage.getItem('bank')}$`;
@@ -22,6 +24,9 @@ function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, 
     while (dealerHandOutput.firstChild) {
         dealerHandOutput.removeChild(dealerHandOutput.firstChild);
     }
+
+    winner.textContent = ``;
+    reward.textContent = ``;
 
     btns.style.display = 'none';
     game.style.display = 'none';
