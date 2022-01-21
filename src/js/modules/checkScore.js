@@ -8,10 +8,10 @@ function checkScore(handLS, scoreSelector, hold = false, write = true) {
     hand.forEach(element => {
         tempScore = 0;
 
-        if (isNaN(+element.replace(regex, '')) && !element.endsWith('a')) {
+        if (isNaN(+element.replace(regex, '')) && !element.startsWith('a')) {
             score += 10;
             tempScore += 10;
-        } else if (element.endsWith('a')) {
+        } else if (element.startsWith('a')) {
             if (score + 11 > 21) {
                 score += 1;
                 tempScore += 1;
