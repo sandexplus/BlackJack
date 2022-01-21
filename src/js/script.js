@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
     modal('.popup', '.popup__close');
     modal('.bet', '.bet__close');
     range('.bet__input', '.bet__your-bet');
-    addBet('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns');
+    addBet('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__bet');
     addCardBtn('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card');
     holdBtn('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__bet');
     newGameBtn('.nav__new-game');
