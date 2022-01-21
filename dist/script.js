@@ -2094,11 +2094,17 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addBet", function() { return addBet; });
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector) {
+/* harmony import */ var _newRound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newRound */ "./src/js/modules/newRound.js");
+
+
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector) {
   var btn = document.querySelector(btnSelector),
       bet = document.querySelector(inputSelector),
       bankTitle = document.querySelector(bankSelector),
-      newGame = document.querySelector(newGameSelector);
+      newGame = document.querySelector(newGameSelector),
+      betModal = document.querySelector(betModalSelector),
+      gameSection = document.querySelector(gameSelector),
+      btnsSection = document.querySelector(btnsSelector);
   btn.addEventListener('click', function (e) {
     e.preventDefault();
     var bank;
@@ -2114,6 +2120,11 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector) {
     localStorage.setItem('bank', bank);
     localStorage.setItem('bet', +localStorage.getItem('bet') + +bet.value);
     bankTitle.textContent = "Your bank: ".concat(bank, "$");
+    betModal.style.display = 'none';
+    gameSection.style.display = 'block';
+    btnsSection.style.display = 'block';
+    newGame.style.boxShadow = '';
+    Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.btns__your-score', '.btns__dealer-score', '.popup__winner', '.nav__new-game', '.popup');
   });
 }
 
@@ -2134,10 +2145,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
 
 
-function addCard(deck, hand, scoreSelector, hold) {
+function addCard(handLS, scoreSelector, hold) {
+  var deck = JSON.parse(localStorage.getItem('deck')),
+      hand = JSON.parse(localStorage.getItem(handLS));
   hand.push(deck[0]);
   deck.shift();
-  Object(_checkScore__WEBPACK_IMPORTED_MODULE_0__["checkScore"])(hand, scoreSelector, hold);
+  localStorage.setItem('deck', JSON.stringify(deck));
+  localStorage.setItem(handLS, JSON.stringify(hand));
+  Object(_checkScore__WEBPACK_IMPORTED_MODULE_0__["checkScore"])(handLS, scoreSelector, hold);
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/addCardBtn.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/addCardBtn.js ***!
+  \**************************************/
+/*! exports provided: addCardBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addCardBtn", function() { return addCardBtn; });
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+
+
+
+
+//import { checkScore } from './checkScore';
+
+
+
+function addCardBtn(yourScoreSelector, yourHandOutputSelector, holdBtnSelector, addCardBtnSelector) {
+  function addCardClick() {
+    var yourHandOutput = document.querySelector(yourHandOutputSelector),
+        yourScoreOutput = document.querySelector(yourScoreSelector),
+        holdBtn = document.querySelector(holdBtnSelector); //dealerScore = checkScore('dealerHand', '.btns__dealer-score', true, false);
+
+    while (yourHandOutput.firstChild) {
+      yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+
+    Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('yourHand', '.btns__your-score');
+    var yourHand = JSON.parse(localStorage.getItem('yourHand'));
+    yourHand.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__your-hand', card);
+    });
+    var yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+
+    if (+yourScore >= 21) {
+      holdBtn.click();
+    }
+  }
+
+  var addCardBtn = document.querySelector(addCardBtnSelector);
+  addCardBtn.addEventListener('click', addCardClick);
 }
 
 
@@ -2158,29 +2231,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
 /* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.ends-with */ "./node_modules/core-js/modules/es.string.ends-with.js");
+/* harmony import */ var core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_ends_with__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
 
-function checkScore(hand, scoreSelector) {
+
+function checkScore(handLS, scoreSelector) {
   var hold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var write = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
   var regex = /..$/;
-  var scoreOutput = document.querySelector(scoreSelector);
+  var scoreOutput = document.querySelector(scoreSelector),
+      hand = JSON.parse(localStorage.getItem(handLS));
   var score = 0;
-  var tempScore = 0;
+  var tempScore;
   hand.forEach(function (element) {
     tempScore = 0;
 
-    if (isNaN(+element.replace(regex, '')) && element.replace(regex, '') !== 'a') {
+    if (isNaN(+element.replace(regex, '')) && !element.endsWith('a')) {
       score += 10;
       tempScore += 10;
-    } else if (element.replace(regex, '') === 'a') {
+    } else if (element.endsWith('a')) {
       if (score + 11 > 21) {
         score += 1;
         tempScore += 1;
@@ -2207,6 +2284,148 @@ function checkScore(hand, scoreSelector) {
   } else {
     return score;
   }
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/checkWin.js":
+/*!************************************!*\
+  !*** ./src/js/modules/checkWin.js ***!
+  \************************************/
+/*! exports provided: checkWin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkWin", function() { return checkWin; });
+function checkWin(yourScore, dealerScore, winnerSelector) {
+  var winner = document.querySelector(winnerSelector);
+
+  if (dealerScore === 21) {
+    if (yourScore < 21) {
+      winner.textContent = "Winner: Dealer";
+      localStorage.setItem('bet', 0);
+    }
+
+    if (yourScore === 21) {
+      winner.textContent = "Draw";
+    }
+
+    if (yourScore > 21) {
+      winner.textContent = "Winner: Dealer";
+      localStorage.setItem('bet', 0);
+    }
+  }
+
+  if (dealerScore > 21) {
+    if (yourScore < 21) {
+      winner.textContent = "Winner: You";
+      localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+    }
+
+    if (yourScore === 21) {
+      winner.textContent = "Winner: You";
+      localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+    }
+
+    if (yourScore > 21) {
+      winner.textContent = "Winner: Dealer";
+      localStorage.setItem('bet', 0);
+    }
+  }
+
+  if (dealerScore < 21) {
+    if (yourScore < 21) {
+      if (yourScore < dealerScore) {
+        winner.textContent = "Winner: Dealer";
+        localStorage.setItem('bet', 0);
+      }
+
+      if (yourScore === dealerScore) {
+        winner.textContent = "Draw";
+      }
+
+      if (yourScore > dealerScore) {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+      }
+    }
+
+    if (yourScore === 21) {
+      winner.textContent = "Winner: You";
+      localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+    }
+
+    if (yourScore > 21) {
+      winner.textContent = "Winner: Dealer";
+      localStorage.setItem('bet', 0);
+    }
+  }
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/continueGameBtn.js":
+/*!*******************************************!*\
+  !*** ./src/js/modules/continueGameBtn.js ***!
+  \*******************************************/
+/*! exports provided: continueGameBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "continueGameBtn", function() { return continueGameBtn; });
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+
+
+
+
+
+function continueGameBtn(continueGameSelector, dealerHandSelector, yourHandSelector) {
+  var continueGame = document.querySelector(continueGameSelector);
+  continueGame.addEventListener('click', function (e) {
+    e.preventDefault();
+    console.log(1);
+    var dealerHandOutput = document.querySelector(dealerHandSelector),
+        yourHandOutput = document.querySelector(yourHandSelector);
+    localStorage.setItem('deck', localStorage.getItem('savedDeck'));
+    localStorage.setItem('yourHand', localStorage.getItem('savedYourHand'));
+    localStorage.setItem('dealerHand', localStorage.getItem('savedDealerHand'));
+    localStorage.setItem('bank', localStorage.getItem('savedBank'));
+    localStorage.setItem('bet', localStorage.getItem('savedBet'));
+
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    while (yourHandOutput.firstChild) {
+      yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+
+    var dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
+    dealerHand.forEach(function (card, i) {
+      if (i === 1) {
+        Object(_drawCard__WEBPACK_IMPORTED_MODULE_3__["drawCard"])('.game__dealer-hand', card, true);
+      } else {
+        Object(_drawCard__WEBPACK_IMPORTED_MODULE_3__["drawCard"])('.game__dealer-hand', card);
+      }
+    });
+    Object(_checkScore__WEBPACK_IMPORTED_MODULE_2__["checkScore"])('dealerHand', '.btns__dealer-score');
+    var yourHand = JSON.parse(localStorage.getItem('yourHand'));
+    yourHand.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_3__["drawCard"])('.game__your-hand', card);
+    });
+    Object(_checkScore__WEBPACK_IMPORTED_MODULE_2__["checkScore"])('yourHand', '.btns__your-score');
+  });
 }
 
 
@@ -2276,6 +2495,85 @@ function drawCard(parentSelector, cardTile) {
 
 /***/ }),
 
+/***/ "./src/js/modules/holdBtn.js":
+/*!***********************************!*\
+  !*** ./src/js/modules/holdBtn.js ***!
+  \***********************************/
+/*! exports provided: holdBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "holdBtn", function() { return holdBtn; });
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+/* harmony import */ var _checkWin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./checkWin */ "./src/js/modules/checkWin.js");
+
+
+
+
+
+
+
+
+
+function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, betBtnSelector) {
+  function holdClick() {
+    var dealerScoreOutput = document.querySelector(dealerScoreSelector),
+        dealerHandOutput = document.querySelector(dealerHandSelector),
+        bank = document.querySelector(bankSelector),
+        newGame = document.querySelector(newGameSelector),
+        addCardBtn = document.querySelector(addCardBtnSelector),
+        modal = document.querySelector(modalSelector),
+        yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
+        betBtn = document.querySelector(betBtnSelector);
+    var dealerScore = Object(_checkScore__WEBPACK_IMPORTED_MODULE_4__["checkScore"])('dealerHand', '.btns__dealer-score', true, false);
+
+    while (dealerScore < 17) {
+      Object(_addCard__WEBPACK_IMPORTED_MODULE_5__["addCard"])('dealerHand', '.btns__dealer-score', true);
+      dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
+    }
+
+    dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
+
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    var dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
+    dealerHand.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_6__["drawCard"])('.game__dealer-hand', card);
+    });
+    Object(_checkWin__WEBPACK_IMPORTED_MODULE_7__["checkWin"])(yourScore, dealerScore, '.popup__winner');
+    localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
+    localStorage.setItem('bet', 0);
+    bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
+    newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+    addCardBtn.style.display = 'none';
+    holdBtnBtn.style.display = 'none';
+    betBtn.style.display = 'none';
+    setTimeout(function () {
+      modal.style.display = 'block';
+    }, 1000);
+  }
+
+  var holdBtnBtn = document.querySelector(holdBtnSelector);
+  holdBtnBtn.addEventListener('click', holdClick);
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/modal.js":
 /*!*********************************!*\
   !*** ./src/js/modules/modal.js ***!
@@ -2302,6 +2600,102 @@ function modal(modalSelector, closeSelector) {
 
 /***/ }),
 
+/***/ "./src/js/modules/newGame.js":
+/*!***********************************!*\
+  !*** ./src/js/modules/newGame.js ***!
+  \***********************************/
+/*! exports provided: newGame */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newGame", function() { return newGame; });
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector) {
+  var newGameBtn = document.querySelector(newGameSelector),
+      btns = document.querySelector(btnsSelector),
+      game = document.querySelector(gameSelector),
+      betPopup = document.querySelector(betPopupSelector),
+      bank = document.querySelector(bankSelector),
+      dealerHandOutput = document.querySelector(dealerHandSelector),
+      yourHandOutput = document.querySelector(yourHandSelector);
+
+  if (localStorage.getItem('bank')) {
+    bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
+  } else {
+    bank.textContent = "Your bank: 1000$";
+    localStorage.setItem('bank', 1000);
+  }
+
+  localStorage.setItem('bet', 0);
+  newGameBtn.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+
+  while (yourHandOutput.firstChild) {
+    yourHandOutput.removeChild(yourHandOutput.firstChild);
+  }
+
+  while (dealerHandOutput.firstChild) {
+    dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+  }
+
+  btns.style.display = 'none';
+  game.style.display = 'none';
+
+  function newGameClick() {
+    betPopup.style.display = 'block';
+  }
+
+  newGameBtn.addEventListener('click', newGameClick);
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/newGameBtn.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/newGameBtn.js ***!
+  \**************************************/
+/*! exports provided: newGameBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newGameBtn", function() { return newGameBtn; });
+/* harmony import */ var _newRound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newRound */ "./src/js/modules/newRound.js");
+/* harmony import */ var _newGame__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./newGame */ "./src/js/modules/newGame.js");
+
+
+
+function newGameBtn(newGameSelector, dealerHandSelector, yourHandSelector, dealerScoreSelector, yourScoreSelector) {
+  var newGameBtn = document.querySelector(newGameSelector);
+  newGameBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    /* const dealerHandOutput = document.querySelector(dealerHandSelector),
+        yourHandOutput = document.querySelector(yourHandSelector),
+        dealerScoreOutput = document.querySelector(dealerScoreSelector),
+        yourScoreOutput = document.querySelector(yourScoreSelector);
+      let yourScore = 0,
+        dealerScore = 0;
+      while (dealerHandOutput.firstChild) {
+        dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+    while (yourHandOutput.firstChild) {
+        yourHandOutput.removeChild(yourHandOutput.firstChild);
+    }
+    newRound('.btns__your-score', '.btns__dealer-score', '.popup__winner', '.nav__new-game', '.popup');
+    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
+    dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
+    newGame.style.boxShadow = '';
+    localStorage.setItem('bet', 0); */
+
+    Object(_newGame__WEBPACK_IMPORTED_MODULE_1__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand');
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/newRound.js":
 /*!************************************!*\
   !*** ./src/js/modules/newRound.js ***!
@@ -2319,22 +2713,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shuffle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shuffle */ "./src/js/modules/shuffle.js");
 /* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
 /* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
 
 
 
 
 
 
-function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSelector) {
+
+function newRound(yourScoreSelector, dealerScoreSelector, winnerSelector, newGameSelector, modalSelector) {
+  var winner = document.querySelector(winnerSelector),
+      newGame = document.querySelector(newGameSelector),
+      modal = document.querySelector(modalSelector);
+  var deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
+  var yourHand = [],
+      dealerHand = [],
+      yourScore = 0,
+      dealerScore = 0;
   deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_2__["shuffle"])(deck);
-  console.log(deck);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, yourHand, yourScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, yourHand, yourScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, dealerHand, dealerScoreSelector);
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])(deck, dealerHand, dealerScoreSelector);
+  localStorage.setItem('deck', JSON.stringify(deck));
+  localStorage.setItem('yourHand', JSON.stringify(yourHand));
+  localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])('yourHand', '.btns__your-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])('dealerHand', '.btns__dealer-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])('yourHand', '.btns__your-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_3__["addCard"])('dealerHand', '.btns__dealer-score');
+  yourHand = JSON.parse(localStorage.getItem('yourHand'));
   yourHand.forEach(function (card) {
     Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__your-hand', card);
   });
+  dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
   dealerHand.forEach(function (card, i) {
     if (i === 1) {
       Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__dealer-hand', card, true);
@@ -2342,7 +2750,27 @@ function newRound(deck, yourHand, dealerHand, yourScoreSelector, dealerScoreSele
       Object(_drawCard__WEBPACK_IMPORTED_MODULE_4__["drawCard"])('.game__dealer-hand', card);
     }
   });
-  console.log('deck: ' + deck);
+  /* if (+checkScore('yourHand', '.btns__your-score', false, false) === 21) {
+      if (dealerHand[0].endsWith('a')) {
+          // Дать выбор продалжить играть или получить ставку х2
+          // Но пока что в любом случае игрок выиграл
+          localStorage.setItem('bank', +localStorage.getItem('bank') + localStorage.getItem('bet') * 2.5);
+          localStorage.setItem('bet', 0);
+          newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+          setTimeout(() => {
+              winner.textContent = `Winner: You`;
+              modal.style.display = 'block';
+          }, 1000);
+      } else {
+          localStorage.setItem('bank', +localStorage.getItem('bank') + localStorage.getItem('bet') * 2.5);
+          localStorage.setItem('bet', 0);
+          newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+          setTimeout(() => {
+              winner.textContent = `Winner: You`;
+              modal.style.display = 'block';
+          }, 1000);
+      }
+  } */
 }
 
 
@@ -2364,6 +2792,56 @@ function range(rangeSelector, betSelector) {
       bet = document.querySelector(betSelector);
   range.addEventListener('input', function () {
     bet.textContent = "Your bet: ".concat(range.value, "$");
+  });
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/resetBank.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/resetBank.js ***!
+  \*************************************/
+/*! exports provided: resetBank */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetBank", function() { return resetBank; });
+function resetBank(resetBankSelector, bankSelector) {
+  var resetBankBtn = document.querySelector(resetBankSelector);
+  resetBankBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var bank = document.querySelector(bankSelector);
+    localStorage.setItem('bank', 1000);
+    bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
+  });
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/saveGameBtn.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/saveGameBtn.js ***!
+  \***************************************/
+/*! exports provided: saveGameBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "saveGameBtn", function() { return saveGameBtn; });
+function saveGameBtn(saveGameSelector) {
+  var saveGame = document.querySelector(saveGameSelector);
+  saveGame.addEventListener('click', function (e) {
+    e.preventDefault();
+    localStorage.setItem('savedDeck', localStorage.getItem('deck'));
+    localStorage.setItem('savedYourHand', localStorage.getItem('yourHand'));
+    localStorage.setItem('savedDealerHand', localStorage.getItem('dealerHand'));
+    localStorage.setItem('savedBank', localStorage.getItem('bank'));
+    localStorage.setItem('savedBet', localStorage.getItem('bet'));
   });
 }
 
@@ -2407,22 +2885,16 @@ function shuffle(arr) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
-/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _modules_addCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/addCard */ "./src/js/modules/addCard.js");
-/* harmony import */ var _modules_checkScore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/checkScore */ "./src/js/modules/checkScore.js");
-/* harmony import */ var _modules_newRound__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/newRound */ "./src/js/modules/newRound.js");
-/* harmony import */ var _modules_drawCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/drawCard */ "./src/js/modules/drawCard.js");
-/* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
-/* harmony import */ var _modules_range__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/range */ "./src/js/modules/range.js");
-/* harmony import */ var _modules_addBet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/addBet */ "./src/js/modules/addBet.js");
-
+/* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+/* harmony import */ var _modules_range__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/range */ "./src/js/modules/range.js");
+/* harmony import */ var _modules_addBet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/addBet */ "./src/js/modules/addBet.js");
+/* harmony import */ var _modules_newGame__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/newGame */ "./src/js/modules/newGame.js");
+/* harmony import */ var _modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/addCardBtn */ "./src/js/modules/addCardBtn.js");
+/* harmony import */ var _modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/holdBtn */ "./src/js/modules/holdBtn.js");
+/* harmony import */ var _modules_newGameBtn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/newGameBtn */ "./src/js/modules/newGameBtn.js");
+/* harmony import */ var _modules_resetBank__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/resetBank */ "./src/js/modules/resetBank.js");
+/* harmony import */ var _modules_saveGameBtn__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/saveGameBtn */ "./src/js/modules/saveGameBtn.js");
+/* harmony import */ var _modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/continueGameBtn */ "./src/js/modules/continueGameBtn.js");
 
 
 
@@ -2436,229 +2908,17 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  var yourHandOutput = document.querySelector('.game__your-hand'),
-      dealerHandOutput = document.querySelector('.game__dealer-hand'),
-      yourScoreOutput = document.querySelector('.btns__your-score'),
-      dealerScoreOutput = document.querySelector('.btns__dealer-score'),
-      winner = document.querySelector('.popup__winner'),
-      saveGame = document.querySelector('.nav__save'),
-      continueGame = document.querySelector('.nav__continue'),
-      newGame = document.querySelector('.nav__new-game'),
-      addCardBtn = document.querySelector('.btns__add-card'),
-      holdBtn = document.querySelector('.btns__hold'),
-      modalSelector = document.querySelector('.popup'),
-      betBtn = document.querySelector('.btns__bet'),
-      betModal = document.querySelector('.bet'),
-      bankSelector = document.querySelector('.bet__bank'),
-      resetBank = document.querySelector('.bet__reset');
-  var deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
-  var yourHand = [],
-      dealerHand = [],
-      yourScore = 0,
-      dealerScore = 0,
-      bank = 0;
-
-  if (localStorage.getItem('bank')) {
-    bank = localStorage.getItem('bank');
-  } else {
-    bank = 1000;
-  }
-
-  Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
-  yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
-  dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
-  bankSelector.textContent = "Your bank: ".concat(bank, "$");
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.popup', '.popup__close');
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_8__["modal"])('.bet', '.bet__close');
-  Object(_modules_range__WEBPACK_IMPORTED_MODULE_9__["range"])('.bet__input', '.bet__your-bet');
-  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_10__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game'); // Add card to your hand
-
-  function addCardClick() {
-    if (+localStorage.getItem('bet') <= 0 || !localStorage.getItem('bet')) {
-      return;
-    }
-
-    dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
-    Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, yourHand, '.btns__your-score');
-
-    while (yourHandOutput.firstChild) {
-      yourHandOutput.removeChild(yourHandOutput.firstChild);
-    }
-
-    yourHand.forEach(function (card) {
-      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
-    });
-    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
-
-    if (yourScore >= 21) {
-      holdBtn.click();
-      addCardBtn.removeEventListener('click', addCardClick);
-      holdBtn.removeEventListener('click', holdClick);
-      newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
-      setTimeout(function () {
-        modalSelector.style.display = 'block';
-      }, 1000);
-    }
-
-    console.log('deck: ' + deck);
-  }
-
-  addCardBtn.addEventListener('click', addCardClick); // Add card to dealer hand
-
-  function holdClick() {
-    if (+localStorage.getItem('bet') <= 0 || !localStorage.getItem('bet')) {
-      return;
-    }
-
-    dealerScore = Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score', true, false);
-
-    while (dealerScore < 17) {
-      Object(_modules_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(deck, dealerHand, '.btns__dealer-score', true);
-      dealerScore = dealerScoreOutput.textContent.replace('Dealer score: ', '');
-    }
-
-    dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
-
-    while (dealerHandOutput.firstChild) {
-      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
-    }
-
-    dealerHand.forEach(function (card) {
-      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
-    });
-
-    if (+dealerScore === 21) {
-      if (+yourScore === 21) {
-        winner.textContent = "Draw";
-      } else {
-        winner.textContent = "Winner: Dealer";
-        localStorage.setItem('bet', 0);
-      }
-    } else if (dealerScore > 21) {
-      if (yourScore > 21) {
-        winner.textContent = "Winner: Dealer";
-        localStorage.setItem('bet', 0);
-      } else {
-        winner.textContent = "Winner: You";
-
-        if (+yourScore === 21) {
-          localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-        } else {
-          localStorage.setItem('bet', localStorage.getItem('bet') * 1.5);
-        }
-      }
-    } else if (dealerScore < 21) {
-      if (yourScore > 21) {
-        winner.textContent = "Winner: Dealer";
-        localStorage.setItem('bet', 0);
-      } else if (+yourScore === 21) {
-        winner.textContent = "Winner: You";
-        localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-      } else {
-        if (+dealerScore >= +yourScore) {
-          winner.textContent = "Winner: Dealer";
-          localStorage.setItem('bet', 0);
-        } else {
-          winner.textContent = "Winner: You";
-          localStorage.setItem('bet', localStorage.getItem('bet') * 1.5);
-        }
-      }
-    }
-
-    localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
-    localStorage.setItem('bet', 0);
-    bankSelector.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
-    addCardBtn.removeEventListener('click', addCardClick);
-    holdBtn.removeEventListener('click', holdClick);
-    newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
-    setTimeout(function () {
-      modalSelector.style.display = 'block';
-    }, 1000);
-  }
-
-  holdBtn.addEventListener('click', holdClick); // Bets
-
-  betBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    betModal.style.display = 'block';
-  }); // Start new game
-
-  newGame.addEventListener('click', function (e) {
-    e.preventDefault();
-    deck = ['2-s', '3-s', '4-s', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-h', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
-    yourHand = [];
-    dealerHand = [];
-    yourScore = 0;
-    dealerScore = 0;
-
-    while (dealerHandOutput.firstChild) {
-      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
-    }
-
-    while (yourHandOutput.firstChild) {
-      yourHandOutput.removeChild(yourHandOutput.firstChild);
-    }
-
-    Object(_modules_newRound__WEBPACK_IMPORTED_MODULE_6__["newRound"])(deck, yourHand, dealerHand, '.btns__your-score', '.btns__dealer-score');
-    yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
-    dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
-    winner.textContent = "Winner: ";
-    addCardBtn.addEventListener('click', addCardClick);
-    holdBtn.addEventListener('click', holdClick);
-    newGame.style.boxShadow = '';
-    localStorage.setItem('bet', 0);
-  }); // Save game
-
-  saveGame.addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.setItem('deck', JSON.stringify(deck));
-    localStorage.setItem('yourHand', JSON.stringify(yourHand));
-    localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
-    localStorage.setItem('yourScore', JSON.stringify(yourScore));
-    localStorage.setItem('dealerScore', JSON.stringify(dealerScore));
-    localStorage.setItem('savedBank', bank);
-    localStorage.setItem('savedBet', localStorage.getItem('bet'));
-  }); // Continue game
-
-  continueGame.addEventListener('click', function (e) {
-    e.preventDefault();
-    deck = JSON.parse(localStorage.getItem('deck'));
-    yourHand = JSON.parse(localStorage.getItem('yourHand'));
-    dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
-    yourScore = JSON.parse(localStorage.getItem('yourScore'));
-    dealerScore = JSON.parse(localStorage.getItem('dealerScore'));
-    bank = localStorage.getItem('savedBank');
-    localStorage.setItem('bank', localStorage.getItem('savedBank'));
-    localStorage.setItem('bet', localStorage.getItem('savedBet'));
-
-    while (dealerHandOutput.firstChild) {
-      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
-    }
-
-    while (yourHandOutput.firstChild) {
-      yourHandOutput.removeChild(yourHandOutput.firstChild);
-    }
-
-    dealerHand.forEach(function (card, i) {
-      if (i === 1) {
-        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card, true);
-      } else {
-        Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
-      }
-    });
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(dealerHand, '.btns__dealer-score');
-    yourHand.forEach(function (card) {
-      Object(_modules_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
-    });
-    Object(_modules_checkScore__WEBPACK_IMPORTED_MODULE_5__["checkScore"])(yourHand, '.btns__your-score');
-  }); //Reset a bank
-
-  resetBank.addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.setItem('bank', 1000);
-    bank = 1000;
-    bankSelector.textContent = "Your bank: ".concat(bank, "$");
-  });
+  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand');
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.popup', '.popup__close');
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.bet', '.bet__close');
+  Object(_modules_range__WEBPACK_IMPORTED_MODULE_1__["range"])('.bet__input', '.bet__your-bet');
+  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns');
+  Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card');
+  Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__bet');
+  Object(_modules_newGameBtn__WEBPACK_IMPORTED_MODULE_6__["newGameBtn"])('.nav__new-game');
+  Object(_modules_resetBank__WEBPACK_IMPORTED_MODULE_7__["resetBank"])('.bet__reset', '.bet__bank');
+  Object(_modules_saveGameBtn__WEBPACK_IMPORTED_MODULE_8__["saveGameBtn"])('.nav__save');
+  Object(_modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__["continueGameBtn"])('.nav__continue', '.game__dealer-hand', '.game__your-hand');
 });
 
 /***/ })

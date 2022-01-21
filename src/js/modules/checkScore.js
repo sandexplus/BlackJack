@@ -1,17 +1,17 @@
-function checkScore(hand, scoreSelector, hold = false, write = true) {
+function checkScore(handLS, scoreSelector, hold = false, write = true) {
     const regex = /..$/;
-    const scoreOutput = document.querySelector(scoreSelector);
-
+    const scoreOutput = document.querySelector(scoreSelector),
+        hand = JSON.parse(localStorage.getItem(handLS));
     let score = 0;
-    let tempScore = 0;
+    let tempScore;
 
     hand.forEach(element => {
         tempScore = 0;
 
-        if (isNaN(+element.replace(regex, '')) && element.replace(regex, '') !== 'a') {
+        if (isNaN(+element.replace(regex, '')) && !element.endsWith('a')) {
             score += 10;
             tempScore += 10;
-        } else if (element.replace(regex, '') === 'a') {
+        } else if (element.endsWith('a')) {
             if (score + 11 > 21) {
                 score += 1;
                 tempScore += 1;
