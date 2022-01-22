@@ -22,7 +22,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         dealerHand = [];
 
 
-    //deck = shuffle(deck);
+    deck = shuffle(deck);
     localStorage.setItem('deck', JSON.stringify(deck));
     localStorage.setItem('yourHand', JSON.stringify(yourHand));
     localStorage.setItem('dealerHand', JSON.stringify(dealerHand));

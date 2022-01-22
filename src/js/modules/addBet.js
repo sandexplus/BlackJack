@@ -29,7 +29,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         }
         bank -= bet;
 
-        newGame.click();
+        //newGame.click();
         localStorage.setItem('bank', bank);
         localStorage.setItem('bet', +localStorage.getItem('bet') + bet);
         bankTitle.textContent = `Your bank: ${bank}$`;
