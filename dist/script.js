@@ -2348,7 +2348,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkWin", function() { return checkWin; });
 function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
   var winner = document.querySelector(winnerSelector),
-      reward = document.querySelector(rewardSelector);
+      reward = document.querySelector(rewardSelector),
+      yourHand = JSON.parse(localStorage.getItem('yourHand'));
 
   if (dealerScore === 21) {
     if (yourScore < 21) {
@@ -2374,9 +2375,15 @@ function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
     }
 
     if (yourScore === 21) {
-      winner.textContent = "Winner: You";
-      localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-      reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      if (yourHand.length === 2) {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2.5);
+        reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      } else {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+        reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      }
     }
 
     if (yourScore > 21) {
@@ -2404,9 +2411,15 @@ function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
     }
 
     if (yourScore === 21) {
-      winner.textContent = "Winner: You";
-      localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-      reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      if (yourHand.length === 2) {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2.5);
+        reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      } else {
+        winner.textContent = "Winner: You";
+        localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+        reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+      }
     }
 
     if (yourScore > 21) {
@@ -2821,12 +2834,17 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playOnBtn", function() { return playOnBtn; });
-function playOnBtn(btnSelector, modalSelector) {
+/* harmony import */ var _holdBtn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./holdBtn */ "./src/js/modules/holdBtn.js");
+
+
+function playOnBtn(btnSelector, modalSelector, holdBtnSelector) {
   var playOn = document.querySelector(btnSelector);
   playOn.addEventListener('click', function (e) {
     e.preventDefault();
-    var modal = document.querySelector(modalSelector);
+    var modal = document.querySelector(modalSelector),
+        holdBtn = document.querySelector(holdBtnSelector);
     modal.style.display = 'none';
+    holdBtn.click();
   });
 }
 
@@ -2957,7 +2975,7 @@ function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelec
         reward = document.querySelector(rewardSelector);
     winner.textContent = "Winner: You";
     localStorage.setItem('bank', +localStorage.getItem('bank') + localStorage.getItem('bet') * 2);
-    reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet'), "$");
+    reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet') * 2, "$");
     localStorage.setItem('bet', 0);
     newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
     thisModal.style.display = 'none';
@@ -3023,7 +3041,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_saveGameBtn__WEBPACK_IMPORTED_MODULE_8__["saveGameBtn"])('.nav__save');
   Object(_modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__["continueGameBtn"])('.nav__continue', '.game__dealer-hand', '.game__your-hand');
   Object(_modules_takeBetBtn__WEBPACK_IMPORTED_MODULE_10__["takeBetBtn"])('.black-jack__take-bet', '.nav__new-game', '.popup__winner', '.popup', '.black-jack', '.btns__add-card', '.btns__hold', '.btns__bet', '.popup__reward');
-  Object(_modules_playOnBtn__WEBPACK_IMPORTED_MODULE_11__["playOnBtn"])('.black-jack__play-on', '.black-jack');
+  Object(_modules_playOnBtn__WEBPACK_IMPORTED_MODULE_11__["playOnBtn"])('.black-jack__play-on', '.black-jack', '.btns__hold');
 });
 
 /***/ })

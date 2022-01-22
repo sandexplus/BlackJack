@@ -33,5 +33,5 @@ window.addEventListener('DOMContentLoaded', () => {
     continueGameBtn('.nav__continue', '.game__dealer-hand', '.game__your-hand');
 
     takeBetBtn('.black-jack__take-bet', '.nav__new-game', '.popup__winner', '.popup', '.black-jack', '.btns__add-card', '.btns__hold', '.btns__bet', '.popup__reward');
-    playOnBtn('.black-jack__play-on', '.black-jack');
+    playOnBtn('.black-jack__play-on', '.black-jack', '.btns__hold');
 });

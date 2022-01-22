@@ -15,7 +15,7 @@ function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelec
 
         winner.textContent = `Winner: You`;
         localStorage.setItem('bank', +localStorage.getItem('bank') + localStorage.getItem('bet') * 2);
-        reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+        reward.textContent = `Your winnings are ${localStorage.getItem('bet') * 2}$`;
         localStorage.setItem('bet', 0);
         newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
         thisModal.style.display = 'none';

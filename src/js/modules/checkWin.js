@@ -1,6 +1,7 @@
 function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
     const winner = document.querySelector(winnerSelector),
-        reward = document.querySelector(rewardSelector);
+        reward = document.querySelector(rewardSelector),
+        yourHand = JSON.parse(localStorage.getItem('yourHand'));
 
     if (dealerScore === 21) {
         if (yourScore < 21) {
@@ -22,9 +23,15 @@ function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
             reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
         }
         if (yourScore === 21) {
-            winner.textContent = `Winner: You`;
-            localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-            reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            if (yourHand.length === 2) {
+                winner.textContent = `Winner: You`;
+                localStorage.setItem('bet', localStorage.getItem('bet') * 2.5);
+                reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            } else {
+                winner.textContent = `Winner: You`;
+                localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+                reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            }
         }
         if (yourScore > 21) {
             winner.textContent = `Winner: Dealer`;
@@ -47,9 +54,15 @@ function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
             }
         }
         if (yourScore === 21) {
-            winner.textContent = `Winner: You`;
-            localStorage.setItem('bet', localStorage.getItem('bet') * 2);
-            reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            if (yourHand.length === 2) {
+                winner.textContent = `Winner: You`;
+                localStorage.setItem('bet', localStorage.getItem('bet') * 2.5);
+                reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            } else {
+                winner.textContent = `Winner: You`;
+                localStorage.setItem('bet', localStorage.getItem('bet') * 2);
+                reward.textContent = `Your winnings are ${localStorage.getItem('bet')}$`;
+            }
         }
         if (yourScore > 21) {
             winner.textContent = `Winner: Dealer`;
