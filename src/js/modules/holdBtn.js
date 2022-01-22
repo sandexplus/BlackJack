@@ -3,16 +3,16 @@ import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 import { checkWin } from './checkWin';
 
-function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, betBtnSelector) {
+function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector) {
     function holdClick() {
         const dealerScoreOutput = document.querySelector(dealerScoreSelector),
             dealerHandOutput = document.querySelector(dealerHandSelector),
             bank = document.querySelector(bankSelector),
             newGame = document.querySelector(newGameSelector),
             addCardBtn = document.querySelector(addCardBtnSelector),
+            surrenderBtn = document.querySelector(surrenderSelector),
             modal = document.querySelector(modalSelector),
-            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
-            betBtn = document.querySelector(betBtnSelector);
+            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', '');
 
 
         let dealerScore = checkScore('dealerHand', '.btns__dealer-score', true, false);
@@ -43,7 +43,7 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
         newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
         addCardBtn.style.display = 'none';
         holdBtnBtn.style.display = 'none';
-        betBtn.style.display = 'none';
+        surrenderBtn.style.display = 'none';
         setTimeout(() => {
             modal.style.display = 'block';
         }, 1000);

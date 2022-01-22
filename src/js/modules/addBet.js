@@ -1,6 +1,6 @@
 import { newRound } from './newRound';
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, betSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector) {
     const btn = document.querySelector(btnSelector),
         bankTitle = document.querySelector(bankSelector),
         newGame = document.querySelector(newGameSelector),
@@ -9,7 +9,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         btnsSection = document.querySelector(btnsSelector),
         addCardBtn = document.querySelector(addCardSelector),
         holdBtnBtn = document.querySelector(holdSelector),
-        betBtn = document.querySelector(betSelector);
+        surrenderBtn = document.querySelector(surrenderSelector);
 
     btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -39,7 +39,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         btnsSection.style.display = 'block';
         addCardBtn.style.display = 'block';
         holdBtnBtn.style.display = 'block';
-        betBtn.style.display = 'block';
+        surrenderBtn.style.display = 'block';
         newGame.style.boxShadow = '';
         newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward');
     });

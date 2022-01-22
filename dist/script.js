@@ -2132,7 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _newRound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newRound */ "./src/js/modules/newRound.js");
 
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, betSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector) {
   var btn = document.querySelector(btnSelector),
       bankTitle = document.querySelector(bankSelector),
       newGame = document.querySelector(newGameSelector),
@@ -2141,7 +2141,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
       btnsSection = document.querySelector(btnsSelector),
       addCardBtn = document.querySelector(addCardSelector),
       holdBtnBtn = document.querySelector(holdSelector),
-      betBtn = document.querySelector(betSelector);
+      surrenderBtn = document.querySelector(surrenderSelector);
   btn.addEventListener('click', function (e) {
     e.preventDefault();
     var bet = +document.querySelector(inputSelector).value;
@@ -2168,7 +2168,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
     btnsSection.style.display = 'block';
     addCardBtn.style.display = 'block';
     holdBtnBtn.style.display = 'block';
-    betBtn.style.display = 'block';
+    surrenderBtn.style.display = 'block';
     newGame.style.boxShadow = '';
     Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward');
   });
@@ -2590,16 +2590,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, betBtnSelector) {
+function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector) {
   function holdClick() {
     var dealerScoreOutput = document.querySelector(dealerScoreSelector),
         dealerHandOutput = document.querySelector(dealerHandSelector),
         bank = document.querySelector(bankSelector),
         newGame = document.querySelector(newGameSelector),
         addCardBtn = document.querySelector(addCardBtnSelector),
+        surrenderBtn = document.querySelector(surrenderSelector),
         modal = document.querySelector(modalSelector),
-        yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
-        betBtn = document.querySelector(betBtnSelector);
+        yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', '');
     var dealerScore = Object(_checkScore__WEBPACK_IMPORTED_MODULE_4__["checkScore"])('dealerHand', '.btns__dealer-score', true, false);
 
     while (dealerScore < 17) {
@@ -2624,7 +2624,7 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
     newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
     addCardBtn.style.display = 'none';
     holdBtnBtn.style.display = 'none';
-    betBtn.style.display = 'none';
+    surrenderBtn.style.display = 'none';
     setTimeout(function () {
       modal.style.display = 'block';
     }, 1000);
@@ -2782,8 +2782,8 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       reward = document.querySelector(rewardSelector);
   var deck = ['10-s', 'a-s', 'a-h', '5-s', '6-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
-      dealerHand = [];
-  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_3__["shuffle"])(deck);
+      dealerHand = []; //deck = shuffle(deck);
+
   localStorage.setItem('deck', JSON.stringify(deck));
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
@@ -2951,6 +2951,43 @@ function shuffle(arr) {
 
 /***/ }),
 
+/***/ "./src/js/modules/surrenderBtn.js":
+/*!****************************************!*\
+  !*** ./src/js/modules/surrenderBtn.js ***!
+  \****************************************/
+/*! exports provided: surrenderBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "surrenderBtn", function() { return surrenderBtn; });
+function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, modalSelector, addCardSelector, holdSelector, newGameSelector) {
+  var surrender = document.querySelector(surrenderSelector);
+  surrender.addEventListener('click', function (e) {
+    e.preventDefault();
+    var winner = document.querySelector(winnerSelector),
+        modal = document.querySelector(modalSelector),
+        subwinner = document.querySelector(subwinnerSelector),
+        addCardBtn = document.querySelector(addCardSelector),
+        holdBtn = document.querySelector(holdSelector),
+        newGame = document.querySelector(newGameSelector);
+    localStorage.setItem('bank', +localStorage.getItem('bank') + Math.floor(+localStorage.getItem('bet') / 2));
+    winner.textContent = "You surrendered";
+    subwinner.textContent = "Your winnigs are ".concat(Math.floor(localStorage.getItem('bet') / 2));
+    addCardBtn.style.display = "none";
+    holdBtn.style.display = "none";
+    surrender.style.display = "none";
+    newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+    setTimeout(function () {
+      modal.style.display = 'block';
+    }, 1000);
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/takeBetBtn.js":
 /*!**************************************!*\
   !*** ./src/js/modules/takeBetBtn.js ***!
@@ -2961,7 +2998,7 @@ function shuffle(arr) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeBetBtn", function() { return takeBetBtn; });
-function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelector, thisModalSelector, addCardSelector, holdSelector, betSelector, rewardSelector) {
+function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelector, thisModalSelector, addCardSelector, holdSelector, rewardSelector, surrenderSelector) {
   var takeBet = document.querySelector(takeBetSelector);
   takeBet.addEventListener('click', function (e) {
     e.preventDefault();
@@ -2971,8 +3008,8 @@ function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelec
         thisModal = document.querySelector(thisModalSelector),
         addCardBtn = document.querySelector(addCardSelector),
         holdBtn = document.querySelector(holdSelector),
-        betBtn = document.querySelector(betSelector),
-        reward = document.querySelector(rewardSelector);
+        reward = document.querySelector(rewardSelector),
+        surrenderBtn = document.querySelector(surrenderSelector);
     winner.textContent = "Winner: You";
     localStorage.setItem('bank', +localStorage.getItem('bank') + localStorage.getItem('bet') * 2);
     reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet') * 2, "$");
@@ -2981,7 +3018,7 @@ function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelec
     thisModal.style.display = 'none';
     addCardBtn.style.display = 'none';
     holdBtn.style.display = 'none';
-    betBtn.style.display = 'none';
+    surrenderBtn.style.display = "none";
     setTimeout(function () {
       modal.style.display = 'block';
     }, 1000);
@@ -3013,6 +3050,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/continueGameBtn */ "./src/js/modules/continueGameBtn.js");
 /* harmony import */ var _modules_takeBetBtn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/takeBetBtn */ "./src/js/modules/takeBetBtn.js");
 /* harmony import */ var _modules_playOnBtn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/playOnBtn */ "./src/js/modules/playOnBtn.js");
+/* harmony import */ var _modules_surrenderBtn__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/surrenderBtn */ "./src/js/modules/surrenderBtn.js");
+
 
 
 
@@ -3034,13 +3073,14 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.black-jack', '.black-jack__close');
   Object(_modules_range__WEBPACK_IMPORTED_MODULE_1__["range"])('.bet__input', '.bet__your-bet');
   Object(_modules_resetBank__WEBPACK_IMPORTED_MODULE_7__["resetBank"])('.bet__reset', '.bet__bank');
-  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__bet');
+  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender');
   Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card');
-  Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__bet');
+  Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender');
+  Object(_modules_surrenderBtn__WEBPACK_IMPORTED_MODULE_12__["surrenderBtn"])('.btns__surrender', '.popup__reward', '.popup__winner', '.popup', '.btns__add-card', '.btns__hold', '.nav__new-game');
   Object(_modules_newGameBtn__WEBPACK_IMPORTED_MODULE_6__["newGameBtn"])('.nav__new-game');
   Object(_modules_saveGameBtn__WEBPACK_IMPORTED_MODULE_8__["saveGameBtn"])('.nav__save');
   Object(_modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__["continueGameBtn"])('.nav__continue', '.game__dealer-hand', '.game__your-hand');
-  Object(_modules_takeBetBtn__WEBPACK_IMPORTED_MODULE_10__["takeBetBtn"])('.black-jack__take-bet', '.nav__new-game', '.popup__winner', '.popup', '.black-jack', '.btns__add-card', '.btns__hold', '.btns__bet', '.popup__reward');
+  Object(_modules_takeBetBtn__WEBPACK_IMPORTED_MODULE_10__["takeBetBtn"])('.black-jack__take-bet', '.nav__new-game', '.popup__winner', '.popup', '.black-jack', '.btns__add-card', '.btns__hold', '.popup__reward', '.btns__surrender');
   Object(_modules_playOnBtn__WEBPACK_IMPORTED_MODULE_11__["playOnBtn"])('.black-jack__play-on', '.black-jack', '.btns__hold');
 });
 

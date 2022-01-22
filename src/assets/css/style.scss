@@ -133,6 +133,13 @@ body {
             background-color: $btn-hold-hover;
         }
     }
+    &__surrender {
+        margin-left: 30px;
+        background-color: $btn-reset;
+        &:hover {
+            background-color: $btn-reset-hover;
+        }
+    }
     &__bet {
         background-color: $btn-bet;
         text-transform: uppercase;
