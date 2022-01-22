@@ -11,6 +11,7 @@ import { continueGameBtn } from './modules/continueGameBtn';
 import { takeBetBtn } from './modules/takeBetBtn';
 import { playOnBtn } from './modules/playOnBtn';
 import { surrenderBtn } from './modules/surrenderBtn';
+import { doubleBtn } from './modules/doubleBtn';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -26,9 +27,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     addBet('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender');
 
-    addCardBtn('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card');
-    holdBtn('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender');
-    surrenderBtn('.btns__surrender', '.popup__reward', '.popup__winner', '.popup', '.btns__add-card', '.btns__hold', '.nav__new-game');
+    addCardBtn('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card', '.btns__double');
+    holdBtn('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender', '.btns__double');
+    surrenderBtn('.btns__surrender', '.popup__reward', '.popup__winner', '.popup', '.btns__add-card', '.btns__hold', '.nav__new-game', '.btns__double');
+    doubleBtn('.btns__double', '.btns__add-card', '.btns__hold');
 
     newGameBtn('.nav__new-game');
     saveGameBtn('.nav__save');

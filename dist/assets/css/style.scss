@@ -140,6 +140,14 @@ body {
             background-color: $btn-reset-hover;
         }
     }
+    &__double {
+        margin-left: 30px;
+        background-color: $btn-bet;
+        display: none;
+        &:hover {
+            background-color: $btn-bet-hover;
+        }
+    }
     &__bet {
         background-color: $btn-bet;
         text-transform: uppercase;

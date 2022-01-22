@@ -1,16 +1,15 @@
-//import { checkScore } from './checkScore';
 import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 
-function addCardBtn(yourScoreSelector, yourHandOutputSelector, holdBtnSelector, addCardBtnSelector) {
+function addCardBtn(yourScoreSelector, yourHandOutputSelector, holdBtnSelector, addCardBtnSelector, doubleBtnSelector) {
 
     function addCardClick() {
         const yourHandOutput = document.querySelector(yourHandOutputSelector),
             yourScoreOutput = document.querySelector(yourScoreSelector),
-            holdBtn = document.querySelector(holdBtnSelector);
+            holdBtn = document.querySelector(holdBtnSelector),
+            doubleBtn = document.querySelector(doubleBtnSelector);
 
-        //dealerScore = checkScore('dealerHand', '.btns__dealer-score', true, false);
-
+        doubleBtn.style.display = 'none';
         while (yourHandOutput.firstChild) {
             yourHandOutput.removeChild(yourHandOutput.firstChild);
         }

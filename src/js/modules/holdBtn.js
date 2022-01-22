@@ -3,7 +3,7 @@ import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 import { checkWin } from './checkWin';
 
-function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector) {
+function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector) {
     function holdClick() {
         const dealerScoreOutput = document.querySelector(dealerScoreSelector),
             dealerHandOutput = document.querySelector(dealerHandSelector),
@@ -12,9 +12,10 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
             addCardBtn = document.querySelector(addCardBtnSelector),
             surrenderBtn = document.querySelector(surrenderSelector),
             modal = document.querySelector(modalSelector),
-            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', '');
+            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
+            doubleBtn = document.querySelector(doubleBtnSelector);
 
-
+        doubleBtn.style.display = 'none';
         let dealerScore = checkScore('dealerHand', '.btns__dealer-score', true, false);
 
         while (dealerScore < 17) {

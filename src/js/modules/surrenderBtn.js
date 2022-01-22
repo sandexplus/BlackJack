@@ -1,4 +1,4 @@
-function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, modalSelector, addCardSelector, holdSelector, newGameSelector) {
+function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, modalSelector, addCardSelector, holdSelector, newGameSelector, doubleBtnSelector) {
     const surrender = document.querySelector(surrenderSelector);
 
     surrender.addEventListener('click', (e) => {
@@ -9,9 +9,10 @@ function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, moda
             subwinner = document.querySelector(subwinnerSelector),
             addCardBtn = document.querySelector(addCardSelector),
             holdBtn = document.querySelector(holdSelector),
-            newGame = document.querySelector(newGameSelector);
+            newGame = document.querySelector(newGameSelector),
+            doubleBtn = document.querySelector(doubleBtnSelector);
 
-
+        doubleBtn.style.display = 'none';
         localStorage.setItem('bank', +localStorage.getItem('bank') + Math.floor(+localStorage.getItem('bet') / 2));
         winner.textContent = `You surrendered`;
         subwinner.textContent = `Your winnigs are ${Math.floor(localStorage.getItem('bet') / 2)}`;

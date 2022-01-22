@@ -3,13 +3,14 @@ import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 import { checkScore } from './checkScore';
 
-function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector) {
+function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector) {
 
     const winner = document.querySelector(winnerSelector),
         newGame = document.querySelector(newGameSelector),
         modal = document.querySelector(modalSelector),
         bjModal = document.querySelector(bjModalSelector),
-        reward = document.querySelector(rewardSelector);
+        reward = document.querySelector(rewardSelector),
+        doubleBtn = document.querySelector(doubleBtnSelector);
 
     let deck = [
         '10-s', 'a-s', 'a-h', '5-s', '6-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s',
@@ -47,6 +48,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         }
     });
 
+
     if (+checkScore('yourHand', '.btns__your-score', false, false) === 21) {
         if (dealerHand[0].startsWith('a')) {
             bjModal.style.display = 'block';
@@ -60,6 +62,11 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
                 modal.style.display = 'block';
             }, 1000);
         }
+    } else {
+        if (+checkScore('yourHand', '.btns__your-score', false, false) < 12 && +checkScore('yourHand', '.btns__your-score', false, false) > 8) {
+            alert('You can double your bet');
+        }
+        doubleBtn.style.display = 'block';
     }
 }
 
