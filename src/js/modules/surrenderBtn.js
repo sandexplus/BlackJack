@@ -15,7 +15,7 @@ function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, moda
         doubleBtn.style.display = 'none';
         localStorage.setItem('bank', +localStorage.getItem('bank') + Math.floor(+localStorage.getItem('bet') / 2));
         winner.textContent = `You surrendered`;
-        subwinner.textContent = `Your winnigs are ${Math.floor(localStorage.getItem('bet') / 2)}`;
+        subwinner.textContent = `Your winnigs are ${Math.floor(localStorage.getItem('bet') / 2)}$`;
 
         addCardBtn.style.display = `none`;
         holdBtn.style.display = `none`;

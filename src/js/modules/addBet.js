@@ -41,7 +41,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         holdBtnBtn.style.display = 'block';
         surrenderBtn.style.display = 'block';
         newGame.style.boxShadow = '';
-        newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double');
+        newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender');
     });
 }
 

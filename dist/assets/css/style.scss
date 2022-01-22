@@ -11,6 +11,8 @@ $btn-bet: #99e6ff;
 $btn-bet-hover: #66d9ff;
 $btn-reset: #fc3a5a;
 $btn-reset-hover: #fc0a32;
+$btn-split: #ffd199;
+$btn-split-hover: #ffba66;
 * {
     margin: 0;
     padding: 0;
@@ -61,7 +63,7 @@ body {
 }
 
 .game {
-    padding-top: 50px;
+    padding-top: 30px;
     &__your-hand,
     &__dealer-hand {
         display: block;
@@ -107,10 +109,11 @@ body {
         display: flex;
         justify-content: space-between;
     }
-    &__btns {
+    &__options-wrapper {
         display: flex;
+        justify-content: flex-end;
     }
-    &__score-wrapper {
+    &__btns {
         display: flex;
     }
     &__btn {
@@ -134,36 +137,25 @@ body {
         }
     }
     &__surrender {
-        margin-left: 30px;
         background-color: $btn-reset;
         &:hover {
             background-color: $btn-reset-hover;
         }
     }
     &__double {
-        margin-left: 30px;
+        margin-right: 30px;
         background-color: $btn-bet;
         display: none;
         &:hover {
             background-color: $btn-bet-hover;
         }
     }
-    &__bet {
-        background-color: $btn-bet;
-        text-transform: uppercase;
-        font-weight: 500;
-        &:hover {
-            background-color: $btn-bet-hover;
-        }
-    }
-    &__your-score {
-        padding: 15px 25px;
-        background-color: $your-score;
+    &__split {
         margin-right: 30px;
-    }
-    &__dealer-score {
-        padding: 15px 25px;
-        background-color: $dealer-score;
+        background-color: $btn-split;
+        &:hover {
+            background-color: $btn-split-hover;
+        }
     }
 }
 

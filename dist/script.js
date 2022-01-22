@@ -2170,7 +2170,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
     holdBtnBtn.style.display = 'block';
     surrenderBtn.style.display = 'block';
     newGame.style.boxShadow = '';
-    Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double');
+    Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender');
   });
 }
 
@@ -2507,6 +2507,9 @@ function continueGameBtn(continueGameSelector, dealerHandSelector, yourHandSelec
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doubleBtn", function() { return doubleBtn; });
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+
+
 function doubleBtn(doubleBtnSelector, addCardBtnSelector, holdBtnSelector) {
   var doubleBtn = document.querySelector(doubleBtnSelector);
   doubleBtn.addEventListener('click', function (e) {
@@ -2519,7 +2522,10 @@ function doubleBtn(doubleBtnSelector, addCardBtnSelector, holdBtnSelector) {
       localStorage.setItem('bet', localStorage.getItem('bet') * 2);
       alert("Your bet was increased to ".concat(localStorage.getItem('bet'), "$"));
       addCardBtn.click();
-      holdBtn.click();
+
+      if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_0__["checkScore"])('yourHand', '.btns__your-score', false, false) < 21) {
+        holdBtn.click();
+      }
     }
   });
 }
@@ -2808,17 +2814,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector) {
+function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector, addCardBtnSelector, holdBtnSelector, surrenderBtnSelector) {
   var winner = document.querySelector(winnerSelector),
       newGame = document.querySelector(newGameSelector),
       modal = document.querySelector(modalSelector),
       bjModal = document.querySelector(bjModalSelector),
       reward = document.querySelector(rewardSelector),
-      doubleBtn = document.querySelector(doubleBtnSelector);
-  var deck = ['10-s', 'a-s', 'a-h', '5-s', '6-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
+      doubleBtn = document.querySelector(doubleBtnSelector),
+      addCardBtn = document.querySelector(addCardBtnSelector),
+      holdBtn = document.querySelector(holdBtnSelector),
+      surrenderBtn = document.querySelector(surrenderBtnSelector);
+  var deck = ['10-s', '10-s', '8-h', '5-s', '3-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
-      dealerHand = [];
-  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_3__["shuffle"])(deck);
+      dealerHand = []; //deck = shuffle(deck);
+
   localStorage.setItem('deck', JSON.stringify(deck));
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
@@ -2848,6 +2857,9 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       reward.textContent = "Your winnings are ".concat(localStorage.getItem('bet') * 2.5, "$");
       localStorage.setItem('bet', 0);
       newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+      addCardBtn.style.display = 'none';
+      holdBtn.style.display = 'none';
+      surrenderBtn.style.display = 'none';
       setTimeout(function () {
         modal.style.display = 'block';
       }, 1000);
@@ -3016,7 +3028,7 @@ function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, moda
     doubleBtn.style.display = 'none';
     localStorage.setItem('bank', +localStorage.getItem('bank') + Math.floor(+localStorage.getItem('bet') / 2));
     winner.textContent = "You surrendered";
-    subwinner.textContent = "Your winnigs are ".concat(Math.floor(localStorage.getItem('bet') / 2));
+    subwinner.textContent = "Your winnigs are ".concat(Math.floor(localStorage.getItem('bet') / 2), "$");
     addCardBtn.style.display = "none";
     holdBtn.style.display = "none";
     surrender.style.display = "none";
