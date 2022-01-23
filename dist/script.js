@@ -2132,7 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _newRound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newRound */ "./src/js/modules/newRound.js");
 
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector) {
   var btn = document.querySelector(btnSelector),
       bankTitle = document.querySelector(bankSelector),
       newGame = document.querySelector(newGameSelector),
@@ -2141,7 +2141,10 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
       btnsSection = document.querySelector(btnsSelector),
       addCardBtn = document.querySelector(addCardSelector),
       holdBtnBtn = document.querySelector(holdSelector),
-      surrenderBtn = document.querySelector(surrenderSelector);
+      surrenderBtn = document.querySelector(surrenderSelector),
+      splitBtn = document.querySelector(splitBtnSelector),
+      splitBtns = document.querySelector(splitBtnsSelector),
+      secondHand = document.querySelector(secondHandSelector);
   btn.addEventListener('click', function (e) {
     e.preventDefault();
     var bet = +document.querySelector(inputSelector).value;
@@ -2169,8 +2172,11 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
     addCardBtn.style.display = 'block';
     holdBtnBtn.style.display = 'block';
     surrenderBtn.style.display = 'block';
+    splitBtn.style.display = 'block';
+    splitBtns.style.display = 'none';
+    secondHand.style.display = 'none';
     newGame.style.boxShadow = '';
-    Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender');
+    Object(_newRound__WEBPACK_IMPORTED_MODULE_0__["newRound"])('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split');
   });
 }
 
@@ -2233,26 +2239,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function addCardBtn(yourScoreSelector, yourHandOutputSelector, holdBtnSelector, addCardBtnSelector, doubleBtnSelector) {
+  var split = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+
   function addCardClick() {
     var yourHandOutput = document.querySelector(yourHandOutputSelector),
         yourScoreOutput = document.querySelector(yourScoreSelector),
-        holdBtn = document.querySelector(holdBtnSelector),
-        doubleBtn = document.querySelector(doubleBtnSelector);
+        doubleBtn = document.querySelector(doubleBtnSelector),
+        holdBtn = document.querySelector(holdBtnSelector);
+    var hand;
+
+    if (yourHandOutputSelector === '.game__your-hand') {
+      hand = 'yourHand';
+    } else {
+      hand = 'yourHand2';
+    }
+
     doubleBtn.style.display = 'none';
 
     while (yourHandOutput.firstChild) {
       yourHandOutput.removeChild(yourHandOutput.firstChild);
     }
 
-    Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('yourHand', '.btns__your-score');
-    var yourHand = JSON.parse(localStorage.getItem('yourHand'));
+    Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])(hand, yourScoreSelector);
+    var yourHand = JSON.parse(localStorage.getItem(hand));
     yourHand.forEach(function (card) {
-      Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__your-hand', card);
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])(yourHandOutputSelector, card);
     });
     var yourScore = +yourScoreOutput.textContent.replace('Your score: ', '');
 
-    if (+yourScore >= 21) {
-      holdBtn.click();
+    if (!split) {
+      if (+yourScore >= 21) {
+        holdBtn.click();
+      }
     }
   }
 
@@ -2323,7 +2341,7 @@ function checkScore(handLS, scoreSelector) {
   });
 
   if (write) {
-    if (scoreSelector === '.btns__your-score') {
+    if (scoreSelector === '.btns__your-score' || scoreSelector === '.btns__your-score-2') {
       scoreOutput.textContent = "Your score: ".concat(score);
     } else {
       scoreOutput.textContent = "Dealer score: ".concat(score);
@@ -2348,9 +2366,10 @@ function checkScore(handLS, scoreSelector) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkWin", function() { return checkWin; });
 function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
+  var yourHand = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'yourHand';
   var winner = document.querySelector(winnerSelector),
-      reward = document.querySelector(rewardSelector),
-      yourHand = JSON.parse(localStorage.getItem('yourHand'));
+      reward = document.querySelector(rewardSelector);
+  reward.textContent = '';
 
   if (dealerScore === 21) {
     if (yourScore < 21) {
@@ -2628,7 +2647,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector) {
+function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector, splitBtnSelector) {
   function holdClick() {
     var dealerScoreOutput = document.querySelector(dealerScoreSelector),
         dealerHandOutput = document.querySelector(dealerHandSelector),
@@ -2638,7 +2657,8 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
         surrenderBtn = document.querySelector(surrenderSelector),
         modal = document.querySelector(modalSelector),
         yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
-        doubleBtn = document.querySelector(doubleBtnSelector);
+        doubleBtn = document.querySelector(doubleBtnSelector),
+        splitBtn = document.querySelector(splitBtnSelector);
     doubleBtn.style.display = 'none';
     var dealerScore = Object(_checkScore__WEBPACK_IMPORTED_MODULE_4__["checkScore"])('dealerHand', '.btns__dealer-score', true, false);
 
@@ -2665,6 +2685,111 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
     addCardBtn.style.display = 'none';
     holdBtnBtn.style.display = 'none';
     surrenderBtn.style.display = 'none';
+    splitBtn.style.display = 'none';
+    setTimeout(function () {
+      modal.style.display = 'block';
+    }, 1000);
+  }
+
+  var holdBtnBtn = document.querySelector(holdBtnSelector);
+  holdBtnBtn.addEventListener('click', holdClick);
+}
+
+
+
+/***/ }),
+
+/***/ "./src/js/modules/holdSplitBtn.js":
+/*!****************************************!*\
+  !*** ./src/js/modules/holdSplitBtn.js ***!
+  \****************************************/
+/*! exports provided: holdSplitBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "holdSplitBtn", function() { return holdSplitBtn; });
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+/* harmony import */ var _checkWin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./checkWin */ "./src/js/modules/checkWin.js");
+
+
+
+
+
+
+
+
+
+function holdSplitBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector) {
+  var winnerSelector = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : '.popup__winner';
+  var rewardSelector = arguments.length > 11 && arguments[11] !== undefined ? arguments[11] : '.popup__reward';
+
+  function holdClick() {
+    var dealerScoreOutput = document.querySelector(dealerScoreSelector),
+        dealerHandOutput = document.querySelector(dealerHandSelector),
+        bank = document.querySelector(bankSelector),
+        newGame = document.querySelector(newGameSelector),
+        addCardBtn = document.querySelector(addCardBtnSelector),
+        surrenderBtn = document.querySelector(surrenderSelector),
+        modal = document.querySelector(modalSelector),
+        yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', '').replace('Dealer score: ', ''),
+        doubleBtn = document.querySelector(doubleBtnSelector);
+    doubleBtn.style.display = 'none';
+    var dealerScore = Object(_checkScore__WEBPACK_IMPORTED_MODULE_4__["checkScore"])('dealerHand', '.btns__dealer-score', true, false);
+    localStorage.setItem('holdCount', +localStorage.getItem('holdCount') + 1);
+    localStorage.setItem(yourScoreSelector, +yourScore);
+
+    if (localStorage.getItem('holdCount') < 2) {
+      return;
+    }
+
+    while (dealerScore < 17) {
+      Object(_addCard__WEBPACK_IMPORTED_MODULE_5__["addCard"])('dealerHand', '.btns__dealer-score', true);
+      dealerScore = +dealerScoreOutput.textContent.replace('Dealer score: ', '');
+    }
+
+    dealerScoreOutput.textContent = "Dealer score: ".concat(dealerScore);
+
+    while (dealerHandOutput.firstChild) {
+      dealerHandOutput.removeChild(dealerHandOutput.firstChild);
+    }
+
+    var dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
+    dealerHand.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_6__["drawCard"])('.game__dealer-hand', card);
+    });
+    var score1 = localStorage.getItem('.btns__your-score'),
+        score2 = localStorage.getItem('.btns__your-score-2'),
+        bet = localStorage.getItem('bet');
+    Object(_checkWin__WEBPACK_IMPORTED_MODULE_7__["checkWin"])(score1, dealerScore, winnerSelector, rewardSelector, 'yourHand');
+    localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +bet));
+    localStorage.setItem('bet', bet);
+    var winner2 = document.createElement('div'),
+        reward2 = document.createElement('div');
+    winner2.classList.add('popup__winner', 'winner2');
+    reward2.classList.add('popup__reward', 'reward2');
+    document.querySelector('.popup__wrapper').appendChild(winner2);
+    document.querySelector('.popup__wrapper').appendChild(reward2);
+    Object(_checkWin__WEBPACK_IMPORTED_MODULE_7__["checkWin"])(score2, dealerScore, '.winner2', '.reward2', 'yourHand2');
+    localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
+    localStorage.setItem('bet', 0);
+    bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
+    newGame.style.boxShadow = '0px 0px 16px 20px rgba(255, 26, 26, 0.2)';
+    addCardBtn.style.display = 'none';
+    holdBtnBtn.style.display = 'none';
+    surrenderBtn.style.display = 'none';
+    document.querySelector('.hold-2').style.display = 'none';
+    document.querySelector('.add-card-2').style.display = 'none';
     setTimeout(function () {
       modal.style.display = 'block';
     }, 1000);
@@ -2814,7 +2939,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector, addCardBtnSelector, holdBtnSelector, surrenderBtnSelector) {
+function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector, addCardBtnSelector, holdBtnSelector, surrenderBtnSelector, splitBtnSelector) {
   var winner = document.querySelector(winnerSelector),
       newGame = document.querySelector(newGameSelector),
       modal = document.querySelector(modalSelector),
@@ -2823,11 +2948,20 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       doubleBtn = document.querySelector(doubleBtnSelector),
       addCardBtn = document.querySelector(addCardBtnSelector),
       holdBtn = document.querySelector(holdBtnSelector),
-      surrenderBtn = document.querySelector(surrenderBtnSelector);
+      surrenderBtn = document.querySelector(surrenderBtnSelector),
+      splitBtn = document.querySelector(splitBtnSelector);
+  winner.textContent = '';
+  reward.textContent = '';
+
+  if (document.querySelector('.winner2') || document.querySelector('.reward2')) {
+    document.querySelector('.winner2').textContent = '';
+    document.querySelector('.reward2').textContent = '';
+  }
+
   var deck = ['10-s', '10-s', '8-h', '5-s', '3-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
-      dealerHand = []; //deck = shuffle(deck);
-
+      dealerHand = [];
+  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_3__["shuffle"])(deck);
   localStorage.setItem('deck', JSON.stringify(deck));
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
@@ -2847,6 +2981,24 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__dealer-hand', card);
     }
   });
+  /* const regex = /..$/;
+    yourHand.forEach((card, i) => {
+      if (card.replace(regex, '') === 'j') {
+          yourHand[i] = card.replace('j', '10');
+      }
+      if (card.replace(regex, '') === 'q') {
+          yourHand[i] = card.replace('q', '10');
+      }
+      if (card.replace(regex, '') === 'k') {
+          yourHand[i] = card.replace('k', '10');
+      }
+      if (card.replace(regex, '') === 'a') {
+          yourHand[i] = card.replace('a', '11');
+      }
+  });
+    if (yourHand[0].replace(regex, '') !== yourHand[1].replace(regex, '')) {
+      splitBtn.style.display = 'none';
+  } */
 
   if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_6__["checkScore"])('yourHand', '.btns__your-score', false, false) === 21) {
     if (dealerHand[0].startsWith('a')) {
@@ -2860,6 +3012,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       addCardBtn.style.display = 'none';
       holdBtn.style.display = 'none';
       surrenderBtn.style.display = 'none';
+      splitBtn.style.display = 'none';
       setTimeout(function () {
         modal.style.display = 'block';
       }, 1000);
@@ -3004,6 +3157,92 @@ function shuffle(arr) {
 
 /***/ }),
 
+/***/ "./src/js/modules/splitBtn.js":
+/*!************************************!*\
+  !*** ./src/js/modules/splitBtn.js ***!
+  \************************************/
+/*! exports provided: splitBtn */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitBtn", function() { return splitBtn; });
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
+/* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+
+
+
+
+
+function splitBtn(splitBtnSelector, doubleBtnSelector, surrenderSelector, addCardBtnSelector, holdBtnSelector, btns1Selector, btns2Selector, btns3Selector, btns4Selector, btnsSplitSelector, firstHandSelector, secondHandSelector, hand2Selector) {
+  var splitBtn = document.querySelector(splitBtnSelector);
+  splitBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var doubleBtn = document.querySelector(doubleBtnSelector),
+        surrenderBtn = document.querySelector(surrenderSelector),
+        addCardBtn = document.querySelector(addCardBtnSelector),
+        holdBtn = document.querySelector(holdBtnSelector),
+        btns1 = document.querySelector(btns1Selector),
+        btns2 = document.querySelector(btns2Selector),
+        btns3 = document.querySelector(btns3Selector),
+        btns4 = document.querySelector(btns4Selector),
+        btnsSplit = document.querySelector(btnsSplitSelector),
+        firstHand = document.querySelector(firstHandSelector),
+        secondHand = document.querySelector(secondHandSelector),
+        hand2 = document.querySelector(hand2Selector);
+    splitBtn.style.display = 'none';
+    doubleBtn.style.display = 'none';
+    surrenderBtn.style.display = 'none';
+    addCardBtn.style.display = 'none';
+    holdBtn.style.display = 'none';
+    btnsSplit.style.display = 'block';
+    secondHand.style.display = 'block';
+    hand2.style.display = 'block';
+    btns1.style.display = 'block';
+    btns2.style.display = 'block';
+    btns3.style.display = 'block';
+    btns4.style.display = 'block';
+    localStorage.removeItem('.btns__your-score');
+    localStorage.removeItem('.btns__your-score-2');
+    var yourHand2 = [],
+        yourHand = JSON.parse(localStorage.getItem('yourHand'));
+    localStorage.setItem('yourHand2', JSON.stringify(yourHand2));
+    yourHand2[0] = yourHand[1];
+    yourHand.pop();
+    localStorage.setItem('yourHand2', JSON.stringify(yourHand2));
+    localStorage.setItem('yourHand', JSON.stringify(yourHand));
+    Object(_addCard__WEBPACK_IMPORTED_MODULE_2__["addCard"])('yourHand', '.btns__your-score');
+    Object(_addCard__WEBPACK_IMPORTED_MODULE_2__["addCard"])('yourHand2', '.btns__your-score-2');
+    localStorage.setItem('holdCount', 0);
+
+    while (firstHand.firstChild) {
+      firstHand.removeChild(firstHand.firstChild);
+    }
+
+    yourHand = JSON.parse(localStorage.getItem('yourHand'));
+    yourHand.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_3__["drawCard"])('.game__your-hand', card);
+    });
+
+    while (secondHand.firstChild) {
+      secondHand.removeChild(secondHand.firstChild);
+    }
+
+    yourHand2 = JSON.parse(localStorage.getItem('yourHand2'));
+    yourHand2.forEach(function (card) {
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_3__["drawCard"])('.game__your-hand-2', card);
+    });
+  });
+}
+
+
+
+/***/ }),
+
 /***/ "./src/js/modules/surrenderBtn.js":
 /*!****************************************!*\
   !*** ./src/js/modules/surrenderBtn.js ***!
@@ -3107,6 +3346,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_playOnBtn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/playOnBtn */ "./src/js/modules/playOnBtn.js");
 /* harmony import */ var _modules_surrenderBtn__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/surrenderBtn */ "./src/js/modules/surrenderBtn.js");
 /* harmony import */ var _modules_doubleBtn__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/doubleBtn */ "./src/js/modules/doubleBtn.js");
+/* harmony import */ var _modules_splitBtn__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./modules/splitBtn */ "./src/js/modules/splitBtn.js");
+/* harmony import */ var _modules_holdSplitBtn__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./modules/holdSplitBtn */ "./src/js/modules/holdSplitBtn.js");
+
+
 
 
 
@@ -3130,11 +3373,17 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.black-jack', '.black-jack__close');
   Object(_modules_range__WEBPACK_IMPORTED_MODULE_1__["range"])('.bet__input', '.bet__your-bet');
   Object(_modules_resetBank__WEBPACK_IMPORTED_MODULE_7__["resetBank"])('.bet__reset', '.bet__bank');
-  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender');
+  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split', '.split-btns', '.game__second-hand');
   Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card', '.btns__double');
-  Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender', '.btns__double');
+  Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender', '.btns__double', '.btns__split'); // Split btns
+
+  Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score', '.game__your-hand', '.hold-1', '.add-card-1', '.btns__double', true);
+  Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score-2', '.game__your-hand-2', '.hold-2', '.add-card-2', '.btns__double', true);
+  Object(_modules_holdSplitBtn__WEBPACK_IMPORTED_MODULE_15__["holdSplitBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.add-card-1', '.popup', '.hold-1', '.btns__surrender', '.btns__double');
+  Object(_modules_holdSplitBtn__WEBPACK_IMPORTED_MODULE_15__["holdSplitBtn"])('.btns__dealer-score', '.btns__your-score-2', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.add-card-2', '.popup', '.hold-2', '.btns__surrender', '.btns__double');
   Object(_modules_surrenderBtn__WEBPACK_IMPORTED_MODULE_12__["surrenderBtn"])('.btns__surrender', '.popup__reward', '.popup__winner', '.popup', '.btns__add-card', '.btns__hold', '.nav__new-game', '.btns__double');
   Object(_modules_doubleBtn__WEBPACK_IMPORTED_MODULE_13__["doubleBtn"])('.btns__double', '.btns__add-card', '.btns__hold');
+  Object(_modules_splitBtn__WEBPACK_IMPORTED_MODULE_14__["splitBtn"])('.btns__split', '.btns__double', '.btns__surrender', '.btns__add-card', '.btns__hold', '.add-card-1', '.hold-1', '.add-card-2', '.hold-2', '.split-btns', '.game__your-hand', '.game__your-hand-2', '.game__second-hand');
   Object(_modules_newGameBtn__WEBPACK_IMPORTED_MODULE_6__["newGameBtn"])('.nav__new-game');
   Object(_modules_saveGameBtn__WEBPACK_IMPORTED_MODULE_8__["saveGameBtn"])('.nav__save');
   Object(_modules_continueGameBtn__WEBPACK_IMPORTED_MODULE_9__["continueGameBtn"])('.nav__continue', '.game__dealer-hand', '.game__your-hand');

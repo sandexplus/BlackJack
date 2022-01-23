@@ -1,8 +1,8 @@
-function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector) {
+function checkWin(yourScore, dealerScore, winnerSelector, rewardSelector, yourHand = 'yourHand') {
     const winner = document.querySelector(winnerSelector),
-        reward = document.querySelector(rewardSelector),
-        yourHand = JSON.parse(localStorage.getItem('yourHand'));
+        reward = document.querySelector(rewardSelector);
 
+    reward.textContent = '';
     if (dealerScore === 21) {
         if (yourScore < 21) {
             winner.textContent = `Winner: Dealer`;

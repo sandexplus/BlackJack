@@ -62,10 +62,19 @@ body {
     }
 }
 
+.winner2 {
+    margin-top: 15px;
+}
+
 .game {
     padding-top: 30px;
+    &__your-hand-wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
     &__your-hand,
-    &__dealer-hand {
+    &__dealer-hand,
+    &__your-hand-2 {
         display: block;
     }
     &__hand {
@@ -103,7 +112,9 @@ body {
     }
 }
 
-.btns {
+.btns,
+.btns-1,
+.btns-2 {
     &__btn-wrapper {
         margin-top: 50px;
         display: flex;
@@ -156,6 +167,24 @@ body {
         &:hover {
             background-color: $btn-split-hover;
         }
+    }
+}
+
+.split-btns {
+    &__btn-wrapper {
+        margin-top: 0;
+    }
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.btns-1,
+.btns-2 {
+    &__btn-wrapper {
+        margin-top: 0;
     }
 }
 

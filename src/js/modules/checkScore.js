@@ -30,7 +30,7 @@ function checkScore(handLS, scoreSelector, hold = false, write = true) {
     });
 
     if (write) {
-        if (scoreSelector === '.btns__your-score') {
+        if (scoreSelector === '.btns__your-score' || scoreSelector === '.btns__your-score-2') {
             scoreOutput.textContent = `Your score: ${score}`;
         } else {
             scoreOutput.textContent = `Dealer score: ${score}`;

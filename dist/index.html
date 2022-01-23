@@ -83,13 +83,44 @@
         </div>
     </section>
 
+    <section class="split-btns" style="display: none;">
+        <div class="container">
+            <div class="split-btns__wrapper">
+                <div class="btns-1">
+                    <div class="btns-1__btn-wrapper">
+                        <div class="btns-1__btns">
+                            <a href="#" class="btns-1__add-card btns__btn add-card-1">One more card</a>
+                            <a href="#" class="btns-1__hold btns__btn hold-1">Hold</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="btns-2">
+                    <div class="btns-2__btn-wrapper">
+                        <div class="btns-2__btns">
+                            <a href="#" class="btns-2__add-card btns__btn add-card-2">One more card</a>
+                            <a href="#" class="btns-2__hold btns__btn hold-2">Hold</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="game">
         <div class="container">
             <div class="game__wrapper">
                 <div class="game__board-wrapper">
                     <div class="game__data-wrapper">
-                        <div class="game__hand btns__your-score">Your hand:</div>
-                        <div class="game__your-hand"></div>
+                        <div class="game__your-hand-wrapper">
+                            <div class="game__first-hand">
+                                <div class="game__hand btns__your-score">Your hand:</div>
+                                <div class="game__your-hand"></div>
+                            </div>
+                            <div class="game__second-hand" style="display: none;">
+                                <div class="game__hand btns__your-score-2">Your hand:</div>
+                                <div class="game__your-hand-2"></div>
+                            </div>
+                        </div>
                         <div class="game__hand btns__dealer-score">Dealer hand:</div>
                         <div class="game__dealer-hand"></div>
                     </div>

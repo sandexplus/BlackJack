@@ -3,7 +3,7 @@ import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 import { checkScore } from './checkScore';
 
-function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector, addCardBtnSelector, holdBtnSelector, surrenderBtnSelector) {
+function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelector, rewardSelector, doubleBtnSelector, addCardBtnSelector, holdBtnSelector, surrenderBtnSelector, splitBtnSelector) {
 
     const winner = document.querySelector(winnerSelector),
         newGame = document.querySelector(newGameSelector),
@@ -13,7 +13,16 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         doubleBtn = document.querySelector(doubleBtnSelector),
         addCardBtn = document.querySelector(addCardBtnSelector),
         holdBtn = document.querySelector(holdBtnSelector),
-        surrenderBtn = document.querySelector(surrenderBtnSelector);
+        surrenderBtn = document.querySelector(surrenderBtnSelector),
+        splitBtn = document.querySelector(splitBtnSelector);
+
+    winner.textContent = '';
+    reward.textContent = '';
+
+    if (document.querySelector('.winner2') || document.querySelector('.reward2')) {
+        document.querySelector('.winner2').textContent = '';
+        document.querySelector('.reward2').textContent = '';
+    }
 
     let deck = [
         '10-s', '10-s', '8-h', '5-s', '3-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s',
@@ -26,7 +35,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         dealerHand = [];
 
 
-    //deck = shuffle(deck);
+    deck = shuffle(deck);
     localStorage.setItem('deck', JSON.stringify(deck));
     localStorage.setItem('yourHand', JSON.stringify(yourHand));
     localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
@@ -51,6 +60,27 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         }
     });
 
+    /* const regex = /..$/;
+
+    yourHand.forEach((card, i) => {
+        if (card.replace(regex, '') === 'j') {
+            yourHand[i] = card.replace('j', '10');
+        }
+        if (card.replace(regex, '') === 'q') {
+            yourHand[i] = card.replace('q', '10');
+        }
+        if (card.replace(regex, '') === 'k') {
+            yourHand[i] = card.replace('k', '10');
+        }
+        if (card.replace(regex, '') === 'a') {
+            yourHand[i] = card.replace('a', '11');
+        }
+    });
+
+    if (yourHand[0].replace(regex, '') !== yourHand[1].replace(regex, '')) {
+        splitBtn.style.display = 'none';
+    } */
+
 
     if (+checkScore('yourHand', '.btns__your-score', false, false) === 21) {
         if (dealerHand[0].startsWith('a')) {
@@ -64,6 +94,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
             addCardBtn.style.display = 'none';
             holdBtn.style.display = 'none';
             surrenderBtn.style.display = 'none';
+            splitBtn.style.display = 'none';
             setTimeout(() => {
                 modal.style.display = 'block';
             }, 1000);

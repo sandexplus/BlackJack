@@ -1,6 +1,6 @@
 import { newRound } from './newRound';
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector) {
     const btn = document.querySelector(btnSelector),
         bankTitle = document.querySelector(bankSelector),
         newGame = document.querySelector(newGameSelector),
@@ -9,7 +9,10 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         btnsSection = document.querySelector(btnsSelector),
         addCardBtn = document.querySelector(addCardSelector),
         holdBtnBtn = document.querySelector(holdSelector),
-        surrenderBtn = document.querySelector(surrenderSelector);
+        surrenderBtn = document.querySelector(surrenderSelector),
+        splitBtn = document.querySelector(splitBtnSelector),
+        splitBtns = document.querySelector(splitBtnsSelector),
+        secondHand = document.querySelector(secondHandSelector);
 
     btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -40,8 +43,11 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         addCardBtn.style.display = 'block';
         holdBtnBtn.style.display = 'block';
         surrenderBtn.style.display = 'block';
+        splitBtn.style.display = 'block';
+        splitBtns.style.display = 'none';
+        secondHand.style.display = 'none';
         newGame.style.boxShadow = '';
-        newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender');
+        newRound('.popup__winner', '.nav__new-game', '.popup', '.black-jack', '.popup__reward', '.btns__double', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split');
     });
 }
 

@@ -3,7 +3,7 @@ import { addCard } from './addCard';
 import { drawCard } from './drawCard';
 import { checkWin } from './checkWin';
 
-function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector, splitBtnSelector) {
+function holdSplitBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, bankSelector, newGameSelector, addCardBtnSelector, modalSelector, holdBtnSelector, surrenderSelector, doubleBtnSelector, winnerSelector = '.popup__winner', rewardSelector = '.popup__reward') {
     function holdClick() {
         const dealerScoreOutput = document.querySelector(dealerScoreSelector),
             dealerHandOutput = document.querySelector(dealerHandSelector),
@@ -12,12 +12,17 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
             addCardBtn = document.querySelector(addCardBtnSelector),
             surrenderBtn = document.querySelector(surrenderSelector),
             modal = document.querySelector(modalSelector),
-            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', ''),
-            doubleBtn = document.querySelector(doubleBtnSelector),
-            splitBtn = document.querySelector(splitBtnSelector);
-
+            yourScore = +document.querySelector(yourScoreSelector).textContent.replace('Your score: ', '').replace('Dealer score: ', ''),
+            doubleBtn = document.querySelector(doubleBtnSelector);
         doubleBtn.style.display = 'none';
         let dealerScore = checkScore('dealerHand', '.btns__dealer-score', true, false);
+        localStorage.setItem('holdCount', +localStorage.getItem('holdCount') + 1);
+
+        localStorage.setItem(yourScoreSelector, +yourScore);
+
+        if (localStorage.getItem('holdCount') < 2) {
+            return;
+        }
 
         while (dealerScore < 17) {
 
@@ -36,7 +41,25 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
             drawCard('.game__dealer-hand', card);
         });
 
-        checkWin(yourScore, dealerScore, '.popup__winner', '.popup__reward');
+
+        let score1 = localStorage.getItem('.btns__your-score'),
+            score2 = localStorage.getItem('.btns__your-score-2'),
+            bet = localStorage.getItem('bet');
+
+        checkWin(score1, dealerScore, winnerSelector, rewardSelector, 'yourHand');
+        localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +bet));
+        localStorage.setItem('bet', bet);
+
+
+        const winner2 = document.createElement('div'),
+            reward2 = document.createElement('div');
+        winner2.classList.add('popup__winner', 'winner2');
+        reward2.classList.add('popup__reward', 'reward2');
+        document.querySelector('.popup__wrapper').appendChild(winner2);
+        document.querySelector('.popup__wrapper').appendChild(reward2);
+
+        checkWin(score2, dealerScore, '.winner2', '.reward2', 'yourHand2');
+
 
         localStorage.setItem('bank', Math.floor(+localStorage.getItem('bank') + +localStorage.getItem('bet')));
         localStorage.setItem('bet', 0);
@@ -46,7 +69,8 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
         addCardBtn.style.display = 'none';
         holdBtnBtn.style.display = 'none';
         surrenderBtn.style.display = 'none';
-        splitBtn.style.display = 'none';
+        document.querySelector('.hold-2').style.display = 'none';
+        document.querySelector('.add-card-2').style.display = 'none';
         setTimeout(() => {
             modal.style.display = 'block';
         }, 1000);
@@ -56,4 +80,4 @@ function holdBtn(dealerScoreSelector, yourScoreSelector, dealerHandSelector, ban
     holdBtnBtn.addEventListener('click', holdClick);
 }
 
-export { holdBtn };
+export { holdSplitBtn };
