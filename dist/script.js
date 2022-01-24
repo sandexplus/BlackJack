@@ -2923,14 +2923,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newRound", function() { return newRound; });
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.for-each */ "./node_modules/core-js/modules/es.array.for-each.js");
 /* harmony import */ var core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.starts-with */ "./node_modules/core-js/modules/es.string.starts-with.js");
-/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _shuffle__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shuffle */ "./src/js/modules/shuffle.js");
-/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
-/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
-/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.starts-with */ "./node_modules/core-js/modules/es.string.starts-with.js");
+/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _shuffle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./shuffle */ "./src/js/modules/shuffle.js");
+/* harmony import */ var _addCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./addCard */ "./src/js/modules/addCard.js");
+/* harmony import */ var _drawCard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./drawCard */ "./src/js/modules/drawCard.js");
+/* harmony import */ var _checkScore__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./checkScore */ "./src/js/modules/checkScore.js");
+
+
 
 
 
@@ -2961,46 +2967,50 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
   var deck = ['10-s', '10-s', '8-h', '5-s', '3-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
   var yourHand = [],
       dealerHand = [];
-  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_3__["shuffle"])(deck);
+  deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_5__["shuffle"])(deck);
   localStorage.setItem('deck', JSON.stringify(deck));
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('yourHand', '.btns__your-score');
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('dealerHand', '.btns__dealer-score');
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('yourHand', '.btns__your-score');
-  Object(_addCard__WEBPACK_IMPORTED_MODULE_4__["addCard"])('dealerHand', '.btns__dealer-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('yourHand', '.btns__your-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('dealerHand', '.btns__dealer-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('yourHand', '.btns__your-score');
+  Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('dealerHand', '.btns__dealer-score');
   yourHand = JSON.parse(localStorage.getItem('yourHand'));
   yourHand.forEach(function (card) {
-    Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__your-hand', card);
+    Object(_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__your-hand', card);
   });
   dealerHand = JSON.parse(localStorage.getItem('dealerHand'));
   dealerHand.forEach(function (card, i) {
     if (i === 1) {
-      Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__dealer-hand', card, true);
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card, true);
     } else {
-      Object(_drawCard__WEBPACK_IMPORTED_MODULE_5__["drawCard"])('.game__dealer-hand', card);
+      Object(_drawCard__WEBPACK_IMPORTED_MODULE_7__["drawCard"])('.game__dealer-hand', card);
     }
   });
-  /* const regex = /..$/;
-    yourHand.forEach((card, i) => {
-      if (card.replace(regex, '') === 'j') {
-          yourHand[i] = card.replace('j', '10');
-      }
-      if (card.replace(regex, '') === 'q') {
-          yourHand[i] = card.replace('q', '10');
-      }
-      if (card.replace(regex, '') === 'k') {
-          yourHand[i] = card.replace('k', '10');
-      }
-      if (card.replace(regex, '') === 'a') {
-          yourHand[i] = card.replace('a', '11');
-      }
-  });
-    if (yourHand[0].replace(regex, '') !== yourHand[1].replace(regex, '')) {
-      splitBtn.style.display = 'none';
-  } */
+  var regex = /..$/;
+  yourHand.forEach(function (card, i) {
+    if (card.replace(regex, '') === 'j') {
+      yourHand[i] = card.replace('j', '10');
+    }
 
-  if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_6__["checkScore"])('yourHand', '.btns__your-score', false, false) === 21) {
+    if (card.replace(regex, '') === 'q') {
+      yourHand[i] = card.replace('q', '10');
+    }
+
+    if (card.replace(regex, '') === 'k') {
+      yourHand[i] = card.replace('k', '10');
+    }
+
+    if (card.replace(regex, '') === 'a') {
+      yourHand[i] = card.replace('a', '11');
+    }
+  });
+
+  if (yourHand[0].replace(regex, '') !== yourHand[1].replace(regex, '')) {
+    splitBtn.style.display = 'none';
+  }
+
+  if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_8__["checkScore"])('yourHand', '.btns__your-score', false, false) === 21) {
     if (dealerHand[0].startsWith('a')) {
       bjModal.style.display = 'block';
     } else {
@@ -3018,7 +3028,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
       }, 1000);
     }
   } else {
-    if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_6__["checkScore"])('yourHand', '.btns__your-score', false, false) < 12 && +Object(_checkScore__WEBPACK_IMPORTED_MODULE_6__["checkScore"])('yourHand', '.btns__your-score', false, false) > 8) {
+    if (+Object(_checkScore__WEBPACK_IMPORTED_MODULE_8__["checkScore"])('yourHand', '.btns__your-score', false, false) < 12 && +Object(_checkScore__WEBPACK_IMPORTED_MODULE_8__["checkScore"])('yourHand', '.btns__your-score', false, false) > 8) {
       alert('You can double your bet');
     }
 

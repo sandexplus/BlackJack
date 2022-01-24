@@ -60,7 +60,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
         }
     });
 
-    /* const regex = /..$/;
+    const regex = /..$/;
 
     yourHand.forEach((card, i) => {
         if (card.replace(regex, '') === 'j') {
@@ -79,7 +79,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
 
     if (yourHand[0].replace(regex, '') !== yourHand[1].replace(regex, '')) {
         splitBtn.style.display = 'none';
-    } */
+    }
 
 
     if (+checkScore('yourHand', '.btns__your-score', false, false) === 21) {
