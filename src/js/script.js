@@ -18,7 +18,7 @@ import { holdSplitBtn } from './modules/holdSplitBtn';
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    newGame('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
+    newGame('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward', '.bet__deck-count');
 
     modal('.popup', '.popup__close');
     modal('.bet', '.bet__close');
@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
     range('.bet__input', '.bet__your-bet');
     resetBank('.bet__reset', '.bet__bank');
 
-    addBet('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split', '.split-btns', '.game__second-hand');
+    addBet('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split', '.split-btns', '.game__second-hand', '.bet__checkbox', '.bet__deck-count');
 
     addCardBtn('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card', '.btns__double');
     holdBtn('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender', '.btns__double', '.btns__split');

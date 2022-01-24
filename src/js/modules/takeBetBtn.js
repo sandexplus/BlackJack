@@ -1,8 +1,8 @@
 function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelector, thisModalSelector, addCardSelector, holdSelector, rewardSelector, surrenderSelector) {
     const takeBet = document.querySelector(takeBetSelector);
 
-    takeBet.addEventListener('click', (e) => {
-        e.preventDefault();
+    takeBet.addEventListener('click', () => {
+
 
         const newGame = document.querySelector(newGameSelector),
             winner = document.querySelector(winnerSelector),

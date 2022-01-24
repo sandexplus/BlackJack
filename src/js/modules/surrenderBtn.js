@@ -1,8 +1,8 @@
 function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, modalSelector, addCardSelector, holdSelector, newGameSelector, doubleBtnSelector) {
     const surrender = document.querySelector(surrenderSelector);
 
-    surrender.addEventListener('click', (e) => {
-        e.preventDefault();
+    surrender.addEventListener('click', () => {
+
 
         const winner = document.querySelector(winnerSelector),
             modal = document.querySelector(modalSelector),

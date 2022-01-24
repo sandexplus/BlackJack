@@ -2132,7 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _newRound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newRound */ "./src/js/modules/newRound.js");
 
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector, cbSelector, deckCountSelector) {
   var btn = document.querySelector(btnSelector),
       bankTitle = document.querySelector(bankSelector),
       newGame = document.querySelector(newGameSelector),
@@ -2144,10 +2144,18 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
       surrenderBtn = document.querySelector(surrenderSelector),
       splitBtn = document.querySelector(splitBtnSelector),
       splitBtns = document.querySelector(splitBtnsSelector),
-      secondHand = document.querySelector(secondHandSelector);
-  btn.addEventListener('click', function (e) {
-    e.preventDefault();
+      secondHand = document.querySelector(secondHandSelector),
+      chb = document.querySelector(cbSelector),
+      deckCount = document.querySelector(deckCountSelector);
+  btn.addEventListener('click', function () {
     var bet = +document.querySelector(inputSelector).value;
+
+    if (chb.checked) {
+      localStorage.setItem('deckCount', 1);
+    } else {
+      localStorage.setItem('deckCount', +deckCount.value);
+    }
+
     var bank;
 
     if (localStorage.getItem('bank')) {
@@ -2476,8 +2484,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function continueGameBtn(continueGameSelector, dealerHandSelector, yourHandSelector) {
   var continueGame = document.querySelector(continueGameSelector);
-  continueGame.addEventListener('click', function (e) {
-    e.preventDefault();
+  continueGame.addEventListener('click', function () {
     console.log(1);
     var dealerHandOutput = document.querySelector(dealerHandSelector),
         yourHandOutput = document.querySelector(yourHandSelector);
@@ -2531,8 +2538,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function doubleBtn(doubleBtnSelector, addCardBtnSelector, holdBtnSelector) {
   var doubleBtn = document.querySelector(doubleBtnSelector);
-  doubleBtn.addEventListener('click', function (e) {
-    e.preventDefault();
+  doubleBtn.addEventListener('click', function () {
     var addCardBtn = document.querySelector(addCardBtnSelector),
         holdBtn = document.querySelector(holdBtnSelector);
 
@@ -2817,8 +2823,6 @@ function modal(modalSelector, closeSelector) {
   var modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector);
   modal.addEventListener('click', function (e) {
-    e.preventDefault();
-
     if (e.target && e.target === modal || e.target === close) {
       modal.style.display = 'none';
     }
@@ -2839,7 +2843,7 @@ function modal(modalSelector, closeSelector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newGame", function() { return newGame; });
-function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector) {
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector, deckCountSelector) {
   var newGameBtn = document.querySelector(newGameSelector),
       btns = document.querySelector(btnsSelector),
       game = document.querySelector(gameSelector),
@@ -2848,7 +2852,17 @@ function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, 
       dealerHandOutput = document.querySelector(dealerHandSelector),
       yourHandOutput = document.querySelector(yourHandSelector),
       winner = document.querySelector(winnerSelector),
-      reward = document.querySelector(rewardSelector);
+      reward = document.querySelector(rewardSelector),
+      deckCount = document.querySelector(deckCountSelector);
+  console.log(deckCount);
+
+  if (!localStorage.getItem('deckCount') || localStorage.getItem('deckCount') === '1') {
+    deckCount.style.display = 'inline-block';
+    document.querySelector('.label__deck-count').style.display = 'inline-block';
+  } else {
+    deckCount.style.display = 'none';
+    document.querySelector('.label__deck-count').style.display = 'none';
+  }
 
   if (localStorage.getItem('bank')) {
     bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
@@ -2901,9 +2915,8 @@ __webpack_require__.r(__webpack_exports__);
 
 function newGameBtn(newGameSelector) {
   var newGameBtn = document.querySelector(newGameSelector);
-  newGameBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    Object(_newGame__WEBPACK_IMPORTED_MODULE_1__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
+  newGameBtn.addEventListener('click', function () {
+    Object(_newGame__WEBPACK_IMPORTED_MODULE_1__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward', '.bet__deck-count');
   });
 }
 
@@ -2964,11 +2977,21 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
     document.querySelector('.reward2').textContent = '';
   }
 
-  var deck = ['10-s', '10-s', '8-h', '5-s', '3-s', '7-s', '8-s', '9-s', '2-s', 'j-s', 'q-s', 'k-s', '3-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', '4-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
+  var deck = ['2-s', '3-s', '4-h', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
+  var tempdeck = ['2-s', '3-s', '4-h', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
+
+  for (var i = 1; i < +localStorage.getItem('deckCount'); i++) {
+    deck.push.apply(deck, tempdeck);
+  }
+
   var yourHand = [],
       dealerHand = [];
+
+  if (JSON.parse(localStorage.getItem('deck')).length < 20) {
+    localStorage.setItem('deck', JSON.stringify(deck));
+  }
+
   deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_5__["shuffle"])(deck);
-  localStorage.setItem('deck', JSON.stringify(deck));
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
   Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('yourHand', '.btns__your-score');
@@ -3055,8 +3078,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function playOnBtn(btnSelector, modalSelector, holdBtnSelector) {
   var playOn = document.querySelector(btnSelector);
-  playOn.addEventListener('click', function (e) {
-    e.preventDefault();
+  playOn.addEventListener('click', function () {
     var modal = document.querySelector(modalSelector),
         holdBtn = document.querySelector(holdBtnSelector);
     modal.style.display = 'none';
@@ -3102,8 +3124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetBank", function() { return resetBank; });
 function resetBank(resetBankSelector, bankSelector) {
   var resetBankBtn = document.querySelector(resetBankSelector);
-  resetBankBtn.addEventListener('click', function (e) {
-    e.preventDefault();
+  resetBankBtn.addEventListener('click', function () {
     var bank = document.querySelector(bankSelector);
     localStorage.setItem('bank', 1000);
     bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
@@ -3126,8 +3147,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "saveGameBtn", function() { return saveGameBtn; });
 function saveGameBtn(saveGameSelector) {
   var saveGame = document.querySelector(saveGameSelector);
-  saveGame.addEventListener('click', function (e) {
-    e.preventDefault();
+  saveGame.addEventListener('click', function () {
     localStorage.setItem('savedDeck', localStorage.getItem('deck'));
     localStorage.setItem('savedYourHand', localStorage.getItem('yourHand'));
     localStorage.setItem('savedDealerHand', localStorage.getItem('dealerHand'));
@@ -3190,8 +3210,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function splitBtn(splitBtnSelector, doubleBtnSelector, surrenderSelector, addCardBtnSelector, holdBtnSelector, btns1Selector, btns2Selector, btns3Selector, btns4Selector, btnsSplitSelector, firstHandSelector, secondHandSelector, hand2Selector) {
   var splitBtn = document.querySelector(splitBtnSelector);
-  splitBtn.addEventListener('click', function (e) {
-    e.preventDefault();
+  splitBtn.addEventListener('click', function () {
     var doubleBtn = document.querySelector(doubleBtnSelector),
         surrenderBtn = document.querySelector(surrenderSelector),
         addCardBtn = document.querySelector(addCardBtnSelector),
@@ -3265,8 +3284,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "surrenderBtn", function() { return surrenderBtn; });
 function surrenderBtn(surrenderSelector, subwinnerSelector, winnerSelector, modalSelector, addCardSelector, holdSelector, newGameSelector, doubleBtnSelector) {
   var surrender = document.querySelector(surrenderSelector);
-  surrender.addEventListener('click', function (e) {
-    e.preventDefault();
+  surrender.addEventListener('click', function () {
     var winner = document.querySelector(winnerSelector),
         modal = document.querySelector(modalSelector),
         subwinner = document.querySelector(subwinnerSelector),
@@ -3304,8 +3322,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeBetBtn", function() { return takeBetBtn; });
 function takeBetBtn(takeBetSelector, newGameSelector, winnerSelector, modalSelector, thisModalSelector, addCardSelector, holdSelector, rewardSelector, surrenderSelector) {
   var takeBet = document.querySelector(takeBetSelector);
-  takeBet.addEventListener('click', function (e) {
-    e.preventDefault();
+  takeBet.addEventListener('click', function () {
     var newGame = document.querySelector(newGameSelector),
         winner = document.querySelector(winnerSelector),
         modal = document.querySelector(modalSelector),
@@ -3377,13 +3394,13 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
+  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward', '.bet__deck-count');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.popup', '.popup__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.bet', '.bet__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.black-jack', '.black-jack__close');
   Object(_modules_range__WEBPACK_IMPORTED_MODULE_1__["range"])('.bet__input', '.bet__your-bet');
   Object(_modules_resetBank__WEBPACK_IMPORTED_MODULE_7__["resetBank"])('.bet__reset', '.bet__bank');
-  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split', '.split-btns', '.game__second-hand');
+  Object(_modules_addBet__WEBPACK_IMPORTED_MODULE_2__["addBet"])('.bet__make-bet', '.bet__input', '.bet__bank', '.nav__new-game', '.bet', '.game', '.btns', '.btns__add-card', '.btns__hold', '.btns__surrender', '.btns__split', '.split-btns', '.game__second-hand', '.bet__checkbox', '.bet__deck-count');
   Object(_modules_addCardBtn__WEBPACK_IMPORTED_MODULE_4__["addCardBtn"])('.btns__your-score', '.game__your-hand', '.btns__hold', '.btns__add-card', '.btns__double');
   Object(_modules_holdBtn__WEBPACK_IMPORTED_MODULE_5__["holdBtn"])('.btns__dealer-score', '.btns__your-score', '.game__dealer-hand', '.bet__bank', '.nav__new-game', '.btns__add-card', '.popup', '.btns__hold', '.btns__surrender', '.btns__double', '.btns__split'); // Split btns
 

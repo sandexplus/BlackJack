@@ -4,8 +4,8 @@ import { drawCard } from './drawCard';
 function continueGameBtn(continueGameSelector, dealerHandSelector, yourHandSelector) {
     const continueGame = document.querySelector(continueGameSelector);
 
-    continueGame.addEventListener('click', (e) => {
-        e.preventDefault();
+    continueGame.addEventListener('click', () => {
+
         console.log(1);
         const dealerHandOutput = document.querySelector(dealerHandSelector),
             yourHandOutput = document.querySelector(yourHandSelector);

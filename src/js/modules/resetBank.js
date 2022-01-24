@@ -1,8 +1,8 @@
 function resetBank(resetBankSelector, bankSelector) {
     const resetBankBtn = document.querySelector(resetBankSelector);
 
-    resetBankBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    resetBankBtn.addEventListener('click', () => {
+
 
         const bank = document.querySelector(bankSelector);
 

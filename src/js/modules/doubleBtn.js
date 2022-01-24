@@ -3,8 +3,8 @@ import { checkScore } from "./checkScore";
 function doubleBtn(doubleBtnSelector, addCardBtnSelector, holdBtnSelector) {
     const doubleBtn = document.querySelector(doubleBtnSelector);
 
-    doubleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    doubleBtn.addEventListener('click', () => {
+
 
         const addCardBtn = document.querySelector(addCardBtnSelector),
             holdBtn = document.querySelector(holdBtnSelector);

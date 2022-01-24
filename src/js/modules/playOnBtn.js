@@ -3,8 +3,8 @@ import { holdBtn } from './holdBtn';
 function playOnBtn(btnSelector, modalSelector, holdBtnSelector) {
     const playOn = document.querySelector(btnSelector);
 
-    playOn.addEventListener('click', (e) => {
-        e.preventDefault();
+    playOn.addEventListener('click', () => {
+
 
 
         const modal = document.querySelector(modalSelector),

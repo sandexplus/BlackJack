@@ -1,4 +1,4 @@
-function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector) {
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector, deckCountSelector) {
     const newGameBtn = document.querySelector(newGameSelector),
         btns = document.querySelector(btnsSelector),
         game = document.querySelector(gameSelector),
@@ -7,7 +7,18 @@ function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, 
         dealerHandOutput = document.querySelector(dealerHandSelector),
         yourHandOutput = document.querySelector(yourHandSelector),
         winner = document.querySelector(winnerSelector),
-        reward = document.querySelector(rewardSelector);
+        reward = document.querySelector(rewardSelector),
+        deckCount = document.querySelector(deckCountSelector);
+
+    console.log(deckCount);
+
+    if (!localStorage.getItem('deckCount') || localStorage.getItem('deckCount') === '1') {
+        deckCount.style.display = 'inline-block';
+        document.querySelector('.label__deck-count').style.display = 'inline-block';
+    } else {
+        deckCount.style.display = 'none';
+        document.querySelector('.label__deck-count').style.display = 'none';
+    }
 
     if (localStorage.getItem('bank')) {
         bank.textContent = `Your bank: ${localStorage.getItem('bank')}$`;

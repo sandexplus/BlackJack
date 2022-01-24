@@ -1,8 +1,8 @@
 function saveGameBtn(saveGameSelector) {
     const saveGame = document.querySelector(saveGameSelector);
 
-    saveGame.addEventListener('click', (e) => {
-        e.preventDefault();
+    saveGame.addEventListener('click', () => {
+
 
         localStorage.setItem('savedDeck', localStorage.getItem('deck'));
         localStorage.setItem('savedYourHand', localStorage.getItem('yourHand'));

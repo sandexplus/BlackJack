@@ -3,7 +3,7 @@ function modal(modalSelector, closeSelector) {
         close = document.querySelector(closeSelector);
 
     modal.addEventListener('click', (e) => {
-        e.preventDefault();
+
 
         if (e.target && e.target === modal || e.target === close) {
             modal.style.display = 'none';

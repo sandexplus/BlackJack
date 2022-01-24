@@ -1,6 +1,6 @@
 import { newRound } from './newRound';
 
-function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector) {
+function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betModalSelector, gameSelector, btnsSelector, addCardSelector, holdSelector, surrenderSelector, splitBtnSelector, splitBtnsSelector, secondHandSelector, cbSelector, deckCountSelector) {
     const btn = document.querySelector(btnSelector),
         bankTitle = document.querySelector(bankSelector),
         newGame = document.querySelector(newGameSelector),
@@ -12,12 +12,20 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
         surrenderBtn = document.querySelector(surrenderSelector),
         splitBtn = document.querySelector(splitBtnSelector),
         splitBtns = document.querySelector(splitBtnsSelector),
-        secondHand = document.querySelector(secondHandSelector);
+        secondHand = document.querySelector(secondHandSelector),
+        chb = document.querySelector(cbSelector),
+        deckCount = document.querySelector(deckCountSelector);
 
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
+    btn.addEventListener('click', () => {
+
 
         const bet = +document.querySelector(inputSelector).value;
+
+        if (chb.checked) {
+            localStorage.setItem('deckCount', 1);
+        } else {
+            localStorage.setItem('deckCount', +deckCount.value);
+        }
 
         let bank;
         if (localStorage.getItem('bank')) {

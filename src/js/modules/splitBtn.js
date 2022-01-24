@@ -4,8 +4,8 @@ import { drawCard } from "./drawCard";
 function splitBtn(splitBtnSelector, doubleBtnSelector, surrenderSelector, addCardBtnSelector, holdBtnSelector, btns1Selector, btns2Selector, btns3Selector, btns4Selector, btnsSplitSelector, firstHandSelector, secondHandSelector, hand2Selector) {
     const splitBtn = document.querySelector(splitBtnSelector);
 
-    splitBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    splitBtn.addEventListener('click', () => {
+
 
         const doubleBtn = document.querySelector(doubleBtnSelector),
             surrenderBtn = document.querySelector(surrenderSelector),
