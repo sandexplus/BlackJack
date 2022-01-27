@@ -2149,13 +2149,6 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
       deckCount = document.querySelector(deckCountSelector);
   btn.addEventListener('click', function () {
     var bet = +document.querySelector(inputSelector).value;
-
-    if (chb.checked) {
-      localStorage.setItem('deckCount', 1);
-    } else {
-      localStorage.setItem('deckCount', +deckCount.value);
-    }
-
     var bank;
 
     if (localStorage.getItem('bank')) {
@@ -2843,7 +2836,7 @@ function modal(modalSelector, closeSelector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newGame", function() { return newGame; });
-function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector, deckCountSelector) {
+function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, bankSelector, dealerHandSelector, yourHandSelector, winnerSelector, rewardSelector) {
   var newGameBtn = document.querySelector(newGameSelector),
       btns = document.querySelector(btnsSelector),
       game = document.querySelector(gameSelector),
@@ -2852,17 +2845,7 @@ function newGame(newGameSelector, btnsSelector, gameSelector, betPopupSelector, 
       dealerHandOutput = document.querySelector(dealerHandSelector),
       yourHandOutput = document.querySelector(yourHandSelector),
       winner = document.querySelector(winnerSelector),
-      reward = document.querySelector(rewardSelector),
-      deckCount = document.querySelector(deckCountSelector);
-  console.log(deckCount);
-
-  if (!localStorage.getItem('deckCount') || localStorage.getItem('deckCount') === '1') {
-    deckCount.style.display = 'inline-block';
-    document.querySelector('.label__deck-count').style.display = 'inline-block';
-  } else {
-    deckCount.style.display = 'none';
-    document.querySelector('.label__deck-count').style.display = 'none';
-  }
+      reward = document.querySelector(rewardSelector);
 
   if (localStorage.getItem('bank')) {
     bank.textContent = "Your bank: ".concat(localStorage.getItem('bank'), "$");
@@ -2978,19 +2961,8 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
   }
 
   var deck = ['2-s', '3-s', '4-h', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
-  var tempdeck = ['2-s', '3-s', '4-h', '5-s', '6-s', '7-s', '8-s', '9-s', '10-s', 'j-s', 'q-s', 'k-s', 'a-s', '2-h', '3-h', '4-h', '5-h', '6-h', '7-h', '8-h', '9-h', '10-h', 'j-h', 'q-h', 'k-h', 'a-s', '2-c', '3-c', '4-c', '5-c', '6-c', '7-c', '8-c', '9-c', '10-c', 'j-c', 'q-c', 'k-c', 'a-c', '2-d', '3-d', '4-d', '5-d', '6-d', '7-d', '8-d', '9-d', '10-d', 'j-d', 'q-d', 'k-d', 'a-d'];
-
-  for (var i = 1; i < +localStorage.getItem('deckCount'); i++) {
-    deck.push.apply(deck, tempdeck);
-  }
-
   var yourHand = [],
       dealerHand = [];
-
-  if (JSON.parse(localStorage.getItem('deck')).length < 20) {
-    localStorage.setItem('deck', JSON.stringify(deck));
-  }
-
   deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_5__["shuffle"])(deck);
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
@@ -3394,7 +3366,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward', '.bet__deck-count');
+  Object(_modules_newGame__WEBPACK_IMPORTED_MODULE_3__["newGame"])('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.popup', '.popup__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.bet', '.bet__close');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_0__["modal"])('.black-jack', '.black-jack__close');

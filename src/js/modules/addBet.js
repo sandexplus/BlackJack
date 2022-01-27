@@ -21,11 +21,7 @@ function addBet(btnSelector, inputSelector, bankSelector, newGameSelector, betMo
 
         const bet = +document.querySelector(inputSelector).value;
 
-        if (chb.checked) {
-            localStorage.setItem('deckCount', 1);
-        } else {
-            localStorage.setItem('deckCount', +deckCount.value);
-        }
+
 
         let bank;
         if (localStorage.getItem('bank')) {

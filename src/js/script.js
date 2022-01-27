@@ -18,7 +18,7 @@ import { holdSplitBtn } from './modules/holdSplitBtn';
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    newGame('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward', '.bet__deck-count');
+    newGame('.nav__new-game', '.btns', '.game', '.bet', '.bet__bank', '.game__dealer-hand', '.game__your-hand', '.popup__winner', '.popup__reward');
 
     modal('.popup', '.popup__close');
     modal('.bet', '.bet__close');
