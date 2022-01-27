@@ -2966,6 +2966,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
   deck = Object(_shuffle__WEBPACK_IMPORTED_MODULE_5__["shuffle"])(deck);
   localStorage.setItem('yourHand', JSON.stringify(yourHand));
   localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
+  localStorage.setItem('deck', JSON.stringify(deck));
   Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('yourHand', '.btns__your-score');
   Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('dealerHand', '.btns__dealer-score');
   Object(_addCard__WEBPACK_IMPORTED_MODULE_6__["addCard"])('yourHand', '.btns__your-score');

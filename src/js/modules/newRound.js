@@ -40,6 +40,7 @@ function newRound(winnerSelector, newGameSelector, modalSelector, bjModalSelecto
 
     localStorage.setItem('yourHand', JSON.stringify(yourHand));
     localStorage.setItem('dealerHand', JSON.stringify(dealerHand));
+    localStorage.setItem('deck', JSON.stringify(deck));
 
 
     addCard('yourHand', '.btns__your-score');
